@@ -1,24 +1,24 @@
 
-export function loadingRequest(name) {
+export function loadingRequest (name) {
   return {
-    type: "loading-request",
-    name: name,
+    type: 'loading-request',
+    name: name
   }
 }
 
-export function requestAjax(name, config) {
+export function requestAjax (name, config) {
   return {
-    effectType: "request-ajax",
+    effectType: 'request-ajax',
     name,
     config
   }
 }
 
-export function completeRequest(requestEffect,
-                                status, response,
-                                headers, when = Date.now()) {
+export function completeRequest (requestEffect,
+  status, response,
+  headers, when = Date.now()) {
   return {
-    type: "complete-request",
+    type: 'complete-request',
     name: requestEffect.name,
     success: status >= 200 && status < 300,
     status: status,
@@ -28,128 +28,127 @@ export function completeRequest(requestEffect,
   }
 }
 
-export function withAjax(dispatch, queueSize = 6, rootUrl = "") {
+export function withAjax (dispatch, queueSize = 6, rootUrl = '') {
   return (effect) => {
-    let requests = {};
-    let canceled = false;
-    let xhrQueue = [];
-    let configsQueue = [];
-    let executingCount = 0;
+    const requests = {}
+    const canceled = false
+    const xhrQueue = []
+    const configsQueue = []
+    let executingCount = 0
 
     const checkAndExecuteNext = () => {
-      if (canceled) return;
+      if (canceled) return
 
       while (executingCount < queueSize && xhrQueue.length && configsQueue.length) {
-        let nextXhr = xhrQueue.shift();
-        let nextConfig = configsQueue.shift();
+        const nextXhr = xhrQueue.shift()
+        const nextConfig = configsQueue.shift()
 
-        executingCount++;
-        if (nextConfig && nextXhr){
-          executeXhrWithConfig(nextConfig, nextXhr, rootUrl);
+        executingCount++
+        if (nextConfig && nextXhr) {
+          executeXhrWithConfig(nextConfig, nextXhr, rootUrl)
         }
       }
-    };
+    }
 
-    let normalizedName;
+    let normalizedName
 
     switch (effect.effectType) {
-      case "request-ajax":
-        normalizedName = effect.name.join("-");
+      case 'request-ajax':
+        normalizedName = effect.name.join('-')
 
-        dispatch(loadingRequest(effect.name));
+        dispatch(loadingRequest(effect.name))
 
-        let xhr = requests[normalizedName] = new XMLHttpRequest();
+        const xhr = requests[normalizedName] = new XMLHttpRequest()
 
         const completeXhr = () => {
-          executingCount--;
+          executingCount--
           if (requests[normalizedName] === xhr) {
-            delete requests[normalizedName];
+            delete requests[normalizedName]
           }
 
-          if (canceled) return;
+          if (canceled) return
 
-          checkAndExecuteNext();
-        };
+          checkAndExecuteNext()
+        }
 
         xhr.onerror = function () {
-          completeXhr();
+          completeXhr()
 
-          dispatch(completeRequest(effect, 0, "", ""));
-        };
+          dispatch(completeRequest(effect, 0, '', ''))
+        }
 
         xhr.onload = function () {
-          completeXhr();
+          completeXhr()
 
-          dispatch(completeRequest(effect, xhr.status, xhr.responseText, xhr.getAllResponseHeaders()));
-        };
+          dispatch(completeRequest(effect, xhr.status, xhr.responseText, xhr.getAllResponseHeaders()))
+        }
 
         xhr.ontimeout = function () {
-          completeXhr();
+          completeXhr()
 
-          dispatch(completeRequest(effect, 408, "", ""));
-        };
+          dispatch(completeRequest(effect, 408, '', ''))
+        }
 
         if (executingCount < queueSize) {
-          executingCount++;
-          executeXhrWithConfig(effect.config, xhr, rootUrl);
-        }
-        else {
-          xhrQueue.push(xhr);
-          configsQueue.push(effect.config);
+          executingCount++
+          executeXhrWithConfig(effect.config, xhr, rootUrl)
+        } else {
+          xhrQueue.push(xhr)
+          configsQueue.push(effect.config)
         }
     }
   }
 }
 
-export function executeXhrWithConfig(config, xhr, rootUrl = "") {
-  xhr.withCredentials = false;
+export function executeXhrWithConfig (config, xhr, rootUrl = '') {
+  xhr.withCredentials = false
 
-  xhr.open(config.method, getAjaxUrl(config, rootUrl), true);
+  xhr.open(config.method, getAjaxUrl(config, rootUrl), true)
 
-  const headers = config.headers;
+  const headers = config.headers
   if (headers) {
-    for (let key in headers) {
-      xhr.setRequestHeader(key, headers[key]);
+    for (const key in headers) {
+      xhr.setRequestHeader(key, headers[key])
     }
   }
 
-  xhr.send(getAjaxBody(config));
+  xhr.send(getAjaxBody(config))
 }
 
-export function urlJoin(root, path) {
-  if (!root) return path;
-  if (!path) return root;
+export function urlJoin (root, path) {
+  if (!root) return path
+  if (!path) return root
   if (typeof URL === 'function') {
-    return new URL(path, root).toString();
+    return new URL(path, root).toString()
   } else {
     if (root[root.length - 1] !== '/') {
-      root += '/';
+      root += '/'
     }
     if (path[0] === '/') {
-      path = path.substring(1);
+      path = path.substring(1)
     }
-    return root + path;
+    return root + path
   }
 }
 
-export function getAjaxUrl(config, rootUrl = "") {
-  let url = urlJoin(rootUrl, config.url);
+export function getAjaxUrl (config, rootUrl = '') {
+  let url = urlJoin(rootUrl, config.url)
 
-  const query = config.query;
+  const query = config.query
   if (query) {
-    let parts = [];
-    for (let key in query) {
-      parts.push(encodeURIComponent(key) + "=" + encodeURIComponent(query[key]));
+    const parts = []
+    for (const key in query) {
+      parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(query[key]))
     }
 
-    if (parts.length) url += (url.indexOf("?") === -1 ? "?" : "&") + parts.join("&");
+    if (parts.length) url += (url.indexOf('?') === -1 ? '?' : '&') + parts.join('&')
   }
 
-  return url;
+  return url
 }
 
-export function getAjaxBody(config) {
-  if (config.body) return config.body;
-  if (config.json) return JSON.stringify(config.json);
-  return null;
+export function getAjaxBody (config) {
+  if (config.body) return config.body
+  if (config.json) return JSON.stringify(config.json)
+  return null
 }
