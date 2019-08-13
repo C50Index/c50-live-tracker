@@ -34,7 +34,7 @@ function Coin (summary, i) {
         class: 'tr',
         scope: 'col'
       },
-      summary.marketcap
+      `$${Number(summary.marketcap).toLocaleString()}`
     ),
     m(
       'td',
@@ -42,7 +42,7 @@ function Coin (summary, i) {
         class: 'tr',
         scope: 'col'
       },
-      summary.price
+      `$${Number(summary.price).toLocaleString()}`
     )
   )
 }
@@ -91,7 +91,9 @@ export function RootPage (dispatch) {
           'Price'
         )
       ),
-      state.coinSummary.map((summary, i) => {
+      Object.keys(state.coinSummaries).map((slug, i) => {
+        const summary = state.coinSummaries[slug]
+
         return Coin(summary, i)
       })
     )

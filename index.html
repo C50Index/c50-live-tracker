@@ -1,21 +1,28 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-    <meta content="utf-8" http-equiv="encoding">
-	   <title>C50 Tracker</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script type="module" src='./src/root.js'></script>
-    <link rel="stylesheet" type="text/css" href="./src/root.css">
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+  <meta content="utf-8" http-equiv="encoding">
+  <title>C50 Tracker</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script type="module" src='./src/root.js'></script>
+  <link rel="stylesheet" type="text/css" href="./src/root.css">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 </head>
+
 <body>
   <div id='app'></div>
-<script>
-	var tid = setInterval(function() {
-    if (document.readyState !== 'complete') return;
-    clearInterval(tid);
-    new MarkactRoot("app");
-}, 100);
-</script>
+  <script>
+    var tid = setInterval(function () {
+      if (document.readyState !== 'complete') return;
+      clearInterval(tid);
+      new MarkactRoot("app");
+    }, 100);
+  </script>
 </body>
+
 </html>

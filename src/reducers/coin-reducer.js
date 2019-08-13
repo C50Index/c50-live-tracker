@@ -8,11 +8,15 @@ export function reduceCoins (state, action) {
   switch (action.type) {
     case 'ws-message':
       if (action.name[0] === coinUpdateWs) {
-        let prices = JSON.parse(action.data.data)
-
-        // state = {...state};
-        // let prevPrices = state.prices;
-        // state.prices = {...state.prices, ...prices};
+        const prices = JSON.parse(action.data.data)
+        state = { ...state }
+        state.coinSummaries = { ...state.coinSummaries }
+        for (const slug in prices) {
+          if (state.coinSummaries[slug]) {
+            state.coinSummaries[slug] = { ...state.coinSummaries[slug] }
+            state.coinSummaries[slug].price = prices[slug]
+          }
+        }
       }
       break
 
@@ -22,7 +26,7 @@ export function reduceCoins (state, action) {
 
         if (action.response) {
           const rows = action.response.split('\n')
-          const coinSummary = []
+          const coinSummaries = {}
           let headers = []
           let startIdx = 0
 
@@ -40,11 +44,13 @@ export function reduceCoins (state, action) {
               row.price = row.close
               delete row.close
             }
-            coinSummary.previousPrice = null
-            coinSummary.push(row)
-            state = { ...state }
-            state.coinSummary = coinSummary
+            row.previousPrice = null
+
+            coinSummaries[row.slug] = row
           }
+
+          state = { ...state }
+          state.coinSummaries = coinSummaries
         }
       }
       break
