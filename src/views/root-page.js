@@ -17,11 +17,6 @@ function Coin (summary, i) {
     color = 'green'
   }
 
-  const marketCap =
-    summary.price && summary.supply
-      ? summary.price * summary.supply
-      : summary.marketcap
-
   return m(
     'tr',
     {
@@ -56,7 +51,7 @@ function Coin (summary, i) {
         class: 'tr',
         scope: 'col'
       },
-      `$${Number(marketCap).toLocaleString()}`
+      `$${summary.marketcap ? Number(summary.marketcap).toLocaleString() : '_'}`
     ),
     m(
       'td',
@@ -71,7 +66,12 @@ function Coin (summary, i) {
 
 export function RootPage (dispatch) {
   return state => {
+    const summaries = []
+    Object.keys(state.coinSummaries).map(slug =>
+      summaries.push(state.coinSummaries[slug])
+    )
     if (state.initialLoad) return m('div', {}, 'Loading...')
+
     return m(
       'div',
       { id: 'main' },
@@ -116,11 +116,11 @@ export function RootPage (dispatch) {
             'Price'
           )
         ),
-        Object.keys(state.coinSummaries).map((slug, i) => {
-          const summary = state.coinSummaries[slug]
-
-          return Coin(summary, i)
-        })
+        summaries
+          .sort((a, b) => b.marketcap - a.marketcap)
+          .map((summary, i) => {
+            return Coin(summary, i)
+          })
       )
     )
   }

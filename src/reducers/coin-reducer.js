@@ -21,6 +21,8 @@ export function reduceCoins (state, action) {
 
           if (prices[slug]) {
             state.coinSummaries[slug].price = prices[slug]
+            state.coinSummaries[slug].marketcap =
+              prices[slug] * state.coinSummaries[slug].supply
           }
         }
       }
@@ -39,6 +41,8 @@ export function reduceCoins (state, action) {
               for (const key in coin) {
                 state.coinSummaries[slug][key] = coin[key]
               }
+              state.coinSummaries[slug].marketcap =
+                Number(coin['supply']) * Number(coin['priceUsd'])
             }
           }
 
@@ -70,10 +74,13 @@ export function reduceCoins (state, action) {
 
             const row = {}
             headers.map((k, i) => (row[k] = splitted[i]))
+
+            // clean up unused fields
             if (row.close) {
               row.price = row.close
               delete row.close
             }
+            delete row.marketcap
             row.previousPrice = null
 
             coinSummaries[row.slug] = row
