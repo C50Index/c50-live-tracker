@@ -1,6 +1,6 @@
 // import { m } from '../core/markact.js'
 const m = window.preact.h
-
+const MARKET_WEIGHTED_DIVISOR = 214570583.32
 function Coin (summary, i) {
   let color = ''
   if (
@@ -101,7 +101,7 @@ export function RootPage (dispatch) {
         m(
           'div',
           { class: 'tc lead' },
-          m('div', {}, `C50 Index: ${(totalMarketcap / 17283175126.0) * 100}`)
+          m('div', {}, `C50 Index: ${totalMarketcap / MARKET_WEIGHTED_DIVISOR}`)
         )
       ),
       m(
