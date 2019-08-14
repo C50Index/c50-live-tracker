@@ -1,4 +1,3 @@
-import { createWS } from '../core/services/ws.js'
 import { requestAjax } from '../core/services/ajax-service.js'
 
 export function reduceInitialLoading (state, action) {
@@ -8,7 +7,6 @@ export function reduceInitialLoading (state, action) {
       if (state.initialLoad) {
         state = { ...state }
         state.initialLoad = false
-        effects = effects.concat(createWS([coinUpdateWs], 'wss://ws.coincap.io/prices?assets=ALL'))
         effects = effects.concat(loadTrackerSummary())
       }
       break
