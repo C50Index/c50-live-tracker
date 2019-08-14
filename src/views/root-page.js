@@ -67,10 +67,16 @@ function Coin (summary, i) {
 export function RootPage (dispatch) {
   return state => {
     const summaries = []
-    Object.keys(state.coinSummaries).map(slug =>
+    let loading = false
+    for (const slug in state.coinSummaries) {
+      if (!state.coinSummaries[slug].marketcap) {
+        loading = true
+        break
+      }
       summaries.push(state.coinSummaries[slug])
-    )
-    if (state.initialLoad) return m('div', {}, 'Loading...')
+    }
+
+    if (state.initialLoad && loading) return m('div', {}, 'Loading...')
 
     return m(
       'div',
