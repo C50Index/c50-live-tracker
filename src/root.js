@@ -13,6 +13,7 @@ window.MarkactRoot = function (id) {
   self = this
   self.id = id
   self.state = { ...initialState }
+  self.root = document.getElementById(self.id);
 
   const subReducer = subReducersFor()
   const computed = computedFor()
@@ -48,7 +49,9 @@ window.MarkactRoot = function (id) {
 
     console.log('new state', self.state)
     const startRenderTime = Date.now()
-    self.render()
+    if(oldState !== self.state) {
+      self.render()
+    }
     const renderTime = Date.now() - startRenderTime
     console.log('rendered in', renderTime, 'ms')
     console.log('completed in', Date.now() - startTimings, 'ms')
@@ -58,9 +61,10 @@ window.MarkactRoot = function (id) {
   }
   self.render = function () {
     const RootPageContent = RootPage(self.dispatch)
-    renderAt(RootPageContent({
-      ...self.state
-    }), self.id)
+    window.preact.render(RootPageContent(self.state), self.root, document.getElementById('main'));
+    // renderAt(RootPageContent({
+    //   ...self.state
+    // }), self.id)
   }
 
   let installingServices = true

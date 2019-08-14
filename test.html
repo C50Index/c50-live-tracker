@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style rel="stylesheet" type="text/less">
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+main {
+	width: 800px;
+	margin: 50px auto;
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="https://unpkg.com/preact@latest/dist/preact.min.js"></script>
+<script type="text/javascript">
+const React = preact
+// class App extends preact.Component {
+// 	render() {
+// 		return (
+// 			<main>
+// 				<h2>Hello!</h2>
+// 			</main>
+// 		)
+// 	}
+// }
+window.onload = () => {
+	const app = window.preact.h('div', null, 'Hello World!');
+
+	// Inject your application into the an element with the id `app`.
+	// Make sure that such an element exists in the dom ;)
+	window.preact.render(app, document.getElementById('app'));
+	// preact.render(<App/>, document.getElementById('app'))
+}
+</script>
+</body>
+</html>

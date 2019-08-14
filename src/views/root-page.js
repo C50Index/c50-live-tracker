@@ -1,4 +1,5 @@
-import { m } from '../core/markact.js'
+// import { m } from '../core/markact.js'
+const m = window.preact.h;
 
 function Coin (summary, i) {
   return m(
@@ -50,7 +51,8 @@ function Coin (summary, i) {
 export function RootPage (dispatch) {
   return state => {
     if (state.initialLoad) return m('div', {}, 'Loading...')
-    return m(
+    return m('div', {id: "main"},
+    m(
       'table',
       {
         class: 'table table-hover'
@@ -96,6 +98,6 @@ export function RootPage (dispatch) {
 
         return Coin(summary, i)
       })
-    )
+    ))
   }
 }
