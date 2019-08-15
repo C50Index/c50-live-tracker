@@ -21,7 +21,12 @@ function Coin (summary, i) {
     'tr',
     {
       class: 'hover-bg-light-blue',
-      style: `color: ${color}`
+      style: `color: ${color}`,
+      onclick: () =>
+        window.open(
+          `https://www.c50index.com/currencies/${summary.slug}/`,
+          '_blank'
+        )
     },
     m(
       'td',
