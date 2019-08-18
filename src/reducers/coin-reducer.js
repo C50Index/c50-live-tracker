@@ -1,6 +1,7 @@
 import {
   coinUpdateWs,
-  loadTrackerSummaryRequestName
+  loadTrackerSummaryRequestName,
+  loadC50CSVRequestName
 } from './initial-loading-reducer.js'
 import { createWS } from '../core/services/ws.js'
 import { requestAjax } from '../core/services/ajax-service.js'
@@ -57,8 +58,7 @@ export function reduceCoins (state, action) {
           )
         }
       } else if (action.name[0] === loadTrackerSummaryRequestName) {
-        // parse csv
-
+        // parse tracker summary csv
         if (action.response) {
           const coinSummaries = parseCSV(action.response, {
             headers: true
@@ -78,6 +78,12 @@ export function reduceCoins (state, action) {
           state.coinSummaries = coinSummaries
           const slugs = Object.keys(state.coinSummaries).join(',')
           effects = effects.concat(loadCoinCapAssets(slugs))
+        }
+      } else if (action.name[0] === loadC50CSVRequestName) {
+        if (action.success) {
+          const c50Summary = parseCSV(action.response, { headers: true })
+          state = { ...state }
+          state.c50Summary = c50Summary
         }
       }
       break

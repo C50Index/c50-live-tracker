@@ -109,8 +109,8 @@ export function RootPage (dispatch) {
           'div',
           { class: 'tc lead' },
           m('div', {}, `C50 Index: ${totalMarketcap / MARKET_WEIGHTED_DIVISOR}`)
-        )
-        // ChartPage(state)
+        ),
+        ChartPage(state)
       ),
       m(
         'table',

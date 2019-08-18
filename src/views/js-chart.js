@@ -1,8 +1,64 @@
 const m = window.preact.h
 
+function renderChart (id) {
+  const chart = document.getElementById(id)
+  if (!chart) return null
+  const ctx = chart.getContext('2d')
+
+  const inst = new window.Chart(ctx, {
+    type: 'line',
+    data: [],
+    options: {
+      scales: {
+        responsive: true,
+        maintainAspectRatio: false,
+        xAxes: [
+          {
+            type: 'time',
+            time: { unit: 'month' },
+            distribution: 'series'
+          }
+        ],
+        yAxes: [
+          {
+            scaleLabel: {
+              display: true,
+              labelString: 'Normalized C50 Index %'
+            }
+          }
+        ]
+      }
+      // tooltips: {
+      //   callbacks: {
+      //     title: function (item, data) {
+      //       var date = item.xLabel
+      //       return new moment(date)
+      //     },
+      //     label: function (item, data) {
+      //       var datasetLabel = data.datasets[item.datasetIndex].label || ''
+      //       var date = item.xLabel
+      //       var value = item.yLabel
+      //       if (datasetLabel === slug) {
+      //         return `${datasetLabel}: $${(
+      //           value * comparedMarketCap
+      //         ).toLocaleString()}`
+      //       } else {
+      //         return `${datasetLabel}: ${(
+      //           value * c50beginningPrice
+      //         ).toLocaleString()}`
+      //       }
+      //     }
+      //   }
+      // }
+    }
+  })
+  return m('div', {}, inst)
+}
+
 export function JSChart (dispatch) {
+  // console.log(ChartInstance)
   return state => {
-    return m('canvas', { id: 'chart', style: 'width: 100%; height: 100%' })
+    return m('canvas', { id: 'chart' }, renderChart('chart'))
   }
 }
 // function drawChart (slug) {
@@ -21,59 +77,6 @@ export function JSChart (dispatch) {
 //     "<canvas id='chart' style='width: 100%; height: 100%;'></canvas>"
 //   var ctx = document.getElementById('chart').getContext('2d')
 //   if (chartInstance) chartInstance.destroy()
-
-//   chartInstance = new Chart(ctx, {
-//     type: 'line',
-//     data: data,
-//     options: {
-//       scales: {
-//         responsive: true,
-//         maintainAspectRatio: false,
-//         xAxes: [
-//           {
-//             type: 'time',
-//             time: { unit: 'month' },
-//             distribution: 'series'
-//           }
-//         ],
-//         yAxes: [
-//           {
-//             scaleLabel: {
-//               display: true,
-//               labelString: 'Normalized C50 Index %'
-//             }
-//           }
-//         ]
-//       },
-//       tooltips: {
-//         callbacks: {
-//           title: function (item, data) {
-//             var date = item.xLabel
-//             return new moment(date)
-//           },
-//           label: function (item, data) {
-//             var datasetLabel = data.datasets[item.datasetIndex].label || ''
-//             var date = item.xLabel
-//             var value = item.yLabel
-//             if (datasetLabel === slug) {
-//               return (
-//                 datasetLabel +
-//                 ': $' +
-//                 (value * comparedMarketCap).toLocaleString()
-//               )
-//             } else {
-//               return (
-//                 datasetLabel +
-//                 ': ' +
-//                 (value * c50beginningPrice).toLocaleString()
-//               )
-//             }
-//           }
-//         }
-//       }
-//     }
-//   })
-// }
 
 // readCSV('https://cdn.answrly.com/c50/all-coins/c50-index.csv', {
 //   headers: true

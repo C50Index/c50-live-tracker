@@ -8,6 +8,7 @@ export function reduceInitialLoading (state, action) {
         state = { ...state }
         state.initialLoad = false
         effects = effects.concat(loadTrackerSummary())
+        effects = effects.concat(loadC50CSV())
       }
       break
   }
