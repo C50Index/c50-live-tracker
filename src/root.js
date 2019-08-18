@@ -1,7 +1,6 @@
 import { reducerChain, computedFor, subReducersFor } from './core/reducers.js'
 import { getCoreServices } from './core/services/services.js'
 import { RootPage } from './views/root-page.js'
-import { renderAt } from './core/markact.js'
 import { initialState } from './state.js'
 import { reduceInputs } from './reducers/subreducers/inputs-reducer.js'
 
@@ -13,10 +12,9 @@ window.MarkactRoot = function (id) {
   self = this
   self.id = id
   self.state = { ...initialState }
-  self.root = document.getElementById(self.id);
+  self.root = document.getElementById(self.id)
 
   const subReducer = subReducersFor()
-  const computed = computedFor()
   self.reduce = function (state, action) {
     return reducerChain(state, action)
       .apply(reduceInitialLoading)
@@ -37,7 +35,7 @@ window.MarkactRoot = function (id) {
       return
     }
     const startTimings = Date.now()
-    console.log('action', action)
+    // console.log('action', action)
 
     const oldState = { ...self.state }
     const reduction = self.reduce(oldState, action)
@@ -47,21 +45,25 @@ window.MarkactRoot = function (id) {
       self.reduceEffects(reduction.effects)
     }
 
-    console.log('new state', self.state)
+    // console.log('new state', self.state)
     const startRenderTime = Date.now()
-    if(oldState !== self.state) {
+    if (oldState !== self.state) {
       self.render()
     }
     const renderTime = Date.now() - startRenderTime
-    console.log('rendered in', renderTime, 'ms')
-    console.log('completed in', Date.now() - startTimings, 'ms')
-    if (renderTime > 50) {
-      console.warn('Slow action:  ', renderTime + 'ms', action)
-    }
+    // console.log('rendered in', renderTime, 'ms')
+    // console.log('co/mpleted in', Date.now() - startTimings, 'ms')
+    // if (renderTime > 50) {
+    // console.warn('Slow action:  ', renderTime + 'ms', action)
+    // }
   }
   self.render = function () {
     const RootPageContent = RootPage(self.dispatch)
-    window.preact.render(RootPageContent(self.state), self.root, document.getElementById('main'));
+    window.preact.render(
+      RootPageContent(self.state),
+      self.root,
+      document.getElementById('main')
+    )
     // renderAt(RootPageContent({
     //   ...self.state
     // }), self.id)

@@ -1,4 +1,5 @@
-// import { m } from '../core/markact.js'
+import { JSChart } from './js-chart.js'
+
 const m = window.preact.h
 const MARKET_WEIGHTED_DIVISOR = 214570583.32
 function Coin (summary, i) {
@@ -70,6 +71,7 @@ function Coin (summary, i) {
 }
 
 export function RootPage (dispatch) {
+  const ChartPage = JSChart(dispatch)
   return state => {
     const summaries = []
     let loading = false
@@ -108,6 +110,7 @@ export function RootPage (dispatch) {
           { class: 'tc lead' },
           m('div', {}, `C50 Index: ${totalMarketcap / MARKET_WEIGHTED_DIVISOR}`)
         )
+        // ChartPage(state)
       ),
       m(
         'table',
@@ -150,6 +153,7 @@ export function RootPage (dispatch) {
             'Price'
           )
         ),
+
         summaries
           .sort((a, b) => b.marketcap - a.marketcap)
           .map((summary, i) => {

@@ -21,5 +21,13 @@ export function loadTrackerSummary () {
   return requestAjax([loadTrackerSummaryRequestName], config)
 }
 
+export function loadC50CSV () {
+  const config = {}
+  config.url = 'https://cdn.answrly.com/c50/all-coins/c50-index.csv'
+  config.method = 'get'
+  return requestAjax([loadC50CSVRequestName], config)
+}
+
 export const coinUpdateWs = 'coin-update-ws'
 export const loadTrackerSummaryRequestName = 'load-tracker-summary'
+export const loadC50CSVRequestName = 'load-c50-csv-request'

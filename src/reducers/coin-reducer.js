@@ -4,6 +4,7 @@ import {
 } from './initial-loading-reducer.js'
 import { createWS } from '../core/services/ws.js'
 import { requestAjax } from '../core/services/ajax-service.js'
+import { parseCSV } from '../utils/csv-utils.js'
 
 export function reduceCoins (state, action) {
   let effects = []
@@ -59,32 +60,19 @@ export function reduceCoins (state, action) {
         // parse csv
 
         if (action.response) {
-          const rows = action.response.split('\n')
-          const coinSummaries = {}
-          let headers = []
-          let startIdx = 0
-
-          // headers
-          startIdx = 1
-          headers = rows[0].split(',')
-
-          for (let i = startIdx; i < rows.length; i++) {
-            if (!rows[i]) continue
-            const splitted = rows[i].split(',')
-
-            const row = {}
-            headers.map((k, i) => (row[k] = splitted[i]))
-
-            // clean up unused fields
-            if (row.close) {
-              row.price = row.close
-              delete row.close
-            }
+          const coinSummaries = parseCSV(action.response, {
+            headers: true
+          }).reduce((summary, row) => {
+            if (!row) return summary
+            row.price = row.close
+            delete row.close
             delete row.marketcap
             row.previousPrice = null
 
-            coinSummaries[row.slug] = row
-          }
+            summary[row.slug] = row
+
+            return summary
+          }, {})
 
           state = { ...state }
           state.coinSummaries = coinSummaries
