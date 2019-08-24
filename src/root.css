@@ -37,3 +37,12 @@
 hover-bg-light-blue:hover {
   background-color: #03a9f4;
 }
+
+.ct-series-a .ct-line, .ct-series-a .ct-point {
+  stroke: #2875e3;
+  stroke-width: 5px;
+}
+
+.ct-grids {
+  display: none;
+}
