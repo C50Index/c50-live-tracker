@@ -34,6 +34,10 @@
   fill: #03a9f4;
 }
 
+.background-light-blue {
+  background-color: #b2b2b2;
+}
+
 .hover-bg-light-blue:hover {
   background-color: #b2b2b2;
 }
@@ -50,4 +54,29 @@
 
 .ct-grids {
   display: none;
+}
+
+.tableFixHead {
+  overflow-y: auto;
+  height: 60vh;
+}
+
+.tableFixHead thead th {
+  position: sticky;
+  top: 0;
+}
+
+/* Just common table stuff. Really. */
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  padding: 100px 16px;
+}
+
+th {
+  background: #ffffff;
 }

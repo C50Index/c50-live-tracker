@@ -4,7 +4,7 @@ import { slugToHuman } from '../utils/slug-utils.js'
 
 const m = window.preact.h
 const MARKET_WEIGHTED_DIVISOR = 214570583.32
-function Coin (summary, i, updateComparedTo) {
+function Coin (summary, i, updateComparedTo, comparedTo) {
   let color = ''
   if (
     summary.price &&
@@ -23,8 +23,10 @@ function Coin (summary, i, updateComparedTo) {
   return m(
     'tr',
     {
-      class: 'hover-bg-light-blue',
-      style: `color: ${color}`,
+      class: `hover-bg-light-blue ${
+        summary.slug === comparedTo ? 'background-light-blue' : ''
+      }`,
+      style: `color: ${color};`,
       onclick: () => {
         updateComparedTo(summary.slug)
       }
@@ -112,7 +114,7 @@ export function RootPage (dispatch) {
       { id: 'main' },
       m(
         'div',
-        { class: 'w-100 tc' },
+        { class: 'w-100 tc', style: 'height: 40vh;' },
         m(
           'div',
           { class: 'w-100 dib tc' },
@@ -132,60 +134,72 @@ export function RootPage (dispatch) {
         ChartPage(state)
       ),
       m(
-        'table',
-        {
-          class: 'table table-hover'
-        },
+        'div',
+        { class: 'tableFixHead container' },
         m(
-          'thead',
-          {},
+          'table',
+          {
+            class: 'table table-hover'
+          },
           m(
-            'th',
-            {
-              class: 'tc',
-              scope: 'col'
-            },
-            '#'
+            'thead',
+            {},
+            m(
+              'th',
+              {
+                class: 'tc',
+                scope: 'col'
+              },
+              '#'
+            ),
+            m(
+              'th',
+              {
+                class: 'tl',
+                scope: 'col'
+              },
+              'Name'
+            ),
+            m(
+              'th',
+              {
+                class: 'tr',
+                scope: 'col'
+              },
+              'Market Cap'
+            ),
+            m(
+              'th',
+              {
+                class: 'tr',
+                scope: 'col'
+              },
+              'Price'
+            ),
+            m(
+              'th',
+              {
+                class: 'tr',
+                scope: 'col'
+              },
+              'More Info'
+            )
           ),
           m(
-            'th',
-            {
-              class: 'tl',
-              scope: 'col'
-            },
-            'Name'
-          ),
-          m(
-            'th',
-            {
-              class: 'tr',
-              scope: 'col'
-            },
-            'Market Cap'
-          ),
-          m(
-            'th',
-            {
-              class: 'tr',
-              scope: 'col'
-            },
-            'Price'
-          ),
-          m(
-            'th',
-            {
-              class: 'tr',
-              scope: 'col'
-            },
-            'More Info'
+            'tbody',
+            {},
+            summaries
+              .sort((a, b) => b.marketcap - a.marketcap)
+              .map((summary, i) => {
+                return Coin(
+                  summary,
+                  i,
+                  dispatcher.updateComparedTo,
+                  state.comparedTo
+                )
+              })
           )
-        ),
-
-        summaries
-          .sort((a, b) => b.marketcap - a.marketcap)
-          .map((summary, i) => {
-            return Coin(summary, i, dispatcher.updateComparedTo)
-          })
+        )
       )
     )
   }
