@@ -34,12 +34,17 @@
   fill: #03a9f4;
 }
 
-hover-bg-light-blue:hover {
-  background-color: #03a9f4;
+.hover-bg-light-blue:hover {
+  background-color: #b2b2b2;
 }
 
 .ct-series-a .ct-line, .ct-series-a .ct-point {
   stroke: #2875e3;
+  stroke-width: 5px;
+}
+
+.ct-series-b .ct-line, .ct-series-b .ct-point {
+  stroke: #333333;
   stroke-width: 5px;
 }
 

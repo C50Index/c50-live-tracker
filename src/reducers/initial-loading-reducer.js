@@ -1,4 +1,5 @@
 import { requestAjax } from '../core/services/ajax-service.js'
+import { loadCoinHistory } from './coin-reducer.js'
 
 export function reduceInitialLoading (state, action) {
   let effects = []
@@ -9,6 +10,7 @@ export function reduceInitialLoading (state, action) {
         state.initialLoad = false
         effects = effects.concat(loadTrackerSummary())
         effects = effects.concat(loadC50CSV())
+        effects = effects.concat(loadCoinHistory(state.comparedTo))
       }
       break
   }

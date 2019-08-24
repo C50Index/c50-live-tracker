@@ -1,8 +1,9 @@
 import { JSChart } from './js-chart.js'
+import { updateComparedTo } from '../reducers/coin-reducer.js'
 
 const m = window.preact.h
 const MARKET_WEIGHTED_DIVISOR = 214570583.32
-function Coin (summary, i) {
+function Coin (summary, i, updateComparedTo) {
   let color = ''
   if (
     summary.price &&
@@ -23,11 +24,9 @@ function Coin (summary, i) {
     {
       class: 'hover-bg-light-blue',
       style: `color: ${color}`,
-      onclick: () =>
-        window.open(
-          `https://www.c50index.com/currencies/${summary.slug}/`,
-          '_blank'
-        )
+      onclick: () => {
+        updateComparedTo(summary.slug)
+      }
     },
     m(
       'td',
@@ -66,12 +65,31 @@ function Coin (summary, i) {
         scope: 'col'
       },
       `$${Number(summary.price).toLocaleString()}`
+    ),
+    m(
+      'td',
+      {
+        class: 'tr',
+        scope: 'col'
+      },
+      m(
+        'a',
+        {
+          href: `https://www.c50index.com/currencies/${summary.slug}/`,
+          target: '_blank'
+        },
+        'More'
+      )
     )
   )
 }
 
 export function RootPage (dispatch) {
   const ChartPage = JSChart(dispatch)
+  const dispatcher = {
+    updateComparedTo: slug => dispatch(updateComparedTo(slug))
+  }
+
   return state => {
     const summaries = []
     let loading = false
@@ -151,13 +169,21 @@ export function RootPage (dispatch) {
               scope: 'col'
             },
             'Price'
+          ),
+          m(
+            'th',
+            {
+              class: 'tr',
+              scope: 'col'
+            },
+            'More Info'
           )
         ),
 
         summaries
           .sort((a, b) => b.marketcap - a.marketcap)
           .map((summary, i) => {
-            return Coin(summary, i)
+            return Coin(summary, i, dispatcher.updateComparedTo)
           })
       )
     )

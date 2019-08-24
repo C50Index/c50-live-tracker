@@ -1,3 +1,5 @@
+import { dateToUnix } from '../utils/date-utils.js'
+
 const m = window.preact.h
 let prevState = null
 
@@ -6,28 +8,76 @@ function renderChart (state) {
   if (!state.c50Summary.map) return
 
   // memoize the state, don't re-render if nothing has changed :)
-  if (!!prevState && state.c50Summary === prevState.c50Summary) return
+  if (
+    !!prevState &&
+    state.c50Summary === prevState.c50Summary &&
+    state.comparedTo === prevState.comparedTo &&
+    // !!prevState.coinHistories &&
+    !!state.coinHistories &&
+    !state.coinHistories[state.comparedTo]
+    //   prevState.coinHistories[state.comparedCoin]
+  ) {
+    return
+  }
+
   prevState = state
 
   const beginningPrice = state.c50Summary[0]['C50Index']
 
-  const data = [] // The data for the chart
+  const series = []
+
   /**
    * Don't show the last element because sometimes that value is wacky from the server... this should
    * probably be fixed at some point, but for now, we'll just throw it out.
    *  */
 
+  const c50IndexData = [] // The c50IndexData for the chart
+
   for (let i = 0; i < state.c50Summary.length - 1; i++) {
     const summary = state.c50Summary[i]
-    data.push({
-      x: summary.Date,
-      y: (Number(summary['C50Index']) - beginningPrice) / beginningPrice
+    const timeUnix = dateToUnix(new Date(summary.Date))
+    const price =
+      (Number(summary['C50Index']) - beginningPrice) / beginningPrice
+
+    c50IndexData.push({
+      x: timeUnix,
+      y: price
     })
+  }
+  series.push(c50IndexData)
+
+  // render the compared data if it exists
+  if (
+    state.coinHistories &&
+    state.coinHistories[state.comparedTo] &&
+    c50IndexData.length > 0
+  ) {
+    const comparedData = []
+    const comparedHistory = state.coinHistories[state.comparedTo]
+    let comparedBeginningPrice = null
+
+    // Start from the first date that is greater or equal than the first c50index date
+    for (const comparedCoin of comparedHistory.sort(
+      (a, b) => Number(a.time_unix) - Number(b.time_unix)
+    )) {
+      if (Number(comparedCoin.time_unix) >= c50IndexData[0].x) {
+        if (!comparedBeginningPrice) {
+          comparedBeginningPrice = Number(comparedCoin.close)
+        }
+        comparedData.push({
+          x: Number(comparedCoin.time_unix),
+          y:
+            (Number(comparedCoin.close) - comparedBeginningPrice) /
+            comparedBeginningPrice
+        })
+      }
+    }
+    series.push(comparedData)
   }
 
   return new window.Chartist.Line(
     '.ct-chart',
-    { series: [data] },
+    { series: series },
     {
       showLine: true,
       axisX: {
@@ -45,6 +95,11 @@ function renderChart (state) {
 export function JSChart (dispatch) {
   return state => {
     renderChart(state)
-    return m('div', { class: 'ct-chart' })
+    return m(
+      'div',
+      { class: 'container' },
+      `C50 Index v ${state.comparedTo}`,
+      m('div', { class: 'ct-chart' })
+    )
   }
 }

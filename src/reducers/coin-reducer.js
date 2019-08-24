@@ -7,6 +7,13 @@ import { createWS } from '../core/services/ws.js'
 import { requestAjax } from '../core/services/ajax-service.js'
 import { parseCSV } from '../utils/csv-utils.js'
 
+export function updateComparedTo (slug) {
+  return {
+    type: 'update-compared-to',
+    slug
+  }
+}
+
 export function reduceCoins (state, action) {
   let effects = []
   switch (action.type) {
@@ -85,6 +92,25 @@ export function reduceCoins (state, action) {
           state = { ...state }
           state.c50Summary = c50Summary
         }
+      } else if (action.name[0] === loadCoinHistoryRequestName) {
+        if (action.success) {
+          const slug = action.name[1]
+          state = { ...state }
+          state.coinHistories = { ...state.coinHistories }
+          state.coinHistories[slug] = parseCSV(action.response, {
+            headers: true
+          })
+        }
+      }
+      break
+
+    case 'update-compared-to':
+      state = { ...state }
+      state.comparedTo = action.slug
+
+      // Don't reload the data if we already have it
+      if (!state.coinHistories[state.comparedTo]) {
+        effects = effects.concat(loadCoinHistory(action.slug))
       }
       break
   }
@@ -92,6 +118,19 @@ export function reduceCoins (state, action) {
     state,
     effects
   }
+}
+
+/**
+ *
+ * @param {*} slugs
+ */
+
+export function loadCoinHistory (slug) {
+  const config = {}
+  config.url = `https://cdn.answrly.com/c50/all-coins/${slug}.csv`
+  config.method = 'get'
+
+  return requestAjax([loadCoinHistoryRequestName, slug], config)
 }
 
 /**
@@ -106,3 +145,4 @@ export function loadCoinCapAssets (slugs) {
 }
 
 export const loadCoinCapAssetsRequestName = 'load-coincap-assets'
+export const loadCoinHistoryRequestName = 'load-coin-history'
