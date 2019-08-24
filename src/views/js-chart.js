@@ -1,4 +1,5 @@
 import { dateToUnix } from '../utils/date-utils.js'
+import { slugToHuman } from '../utils/slug-utils.js'
 
 const m = window.preact.h
 let prevState = null
@@ -98,7 +99,13 @@ export function JSChart (dispatch) {
     return m(
       'div',
       { class: 'container' },
-      `C50 Index v ${state.comparedTo}`,
+      m('span', { style: 'color: #2875e3; font-weight: 700;' }, 'C50Index'),
+      ' v ',
+      m(
+        'span',
+        { style: 'color: #333333; font-weight: 700;' },
+        slugToHuman(state.comparedTo)
+      ),
       m('div', { class: 'ct-chart' })
     )
   }

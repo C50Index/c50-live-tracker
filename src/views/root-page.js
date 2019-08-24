@@ -1,5 +1,6 @@
 import { JSChart } from './js-chart.js'
 import { updateComparedTo } from '../reducers/coin-reducer.js'
+import { slugToHuman } from '../utils/slug-utils.js'
 
 const m = window.preact.h
 const MARKET_WEIGHTED_DIVISOR = 214570583.32
@@ -48,7 +49,7 @@ function Coin (summary, i, updateComparedTo) {
         width: 25,
         height: 25
       }),
-      summary.slug
+      slugToHuman(summary.slug)
     ),
     m(
       'td',
