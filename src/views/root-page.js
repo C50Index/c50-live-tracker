@@ -114,7 +114,7 @@ export function RootPage (dispatch) {
       { id: 'main' },
       m(
         'div',
-        { class: 'w-100 tc', style: 'height: 40vh;' },
+        { class: 'w-100 tc' },
         m(
           'div',
           { class: 'w-100 dib tc' },
@@ -135,11 +135,11 @@ export function RootPage (dispatch) {
       ),
       m(
         'div',
-        { class: 'tableFixHead container' },
+        { class: ' container' },
         m(
           'table',
           {
-            class: 'table table-hover'
+            class: 'table table-hover fixed_header'
           },
           m(
             'thead',
