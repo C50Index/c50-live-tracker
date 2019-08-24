@@ -13,10 +13,10 @@ function renderChart (state) {
     !!prevState &&
     state.c50Summary === prevState.c50Summary &&
     state.comparedTo === prevState.comparedTo &&
-    // !!prevState.coinHistories &&
     !!state.coinHistories &&
-    !state.coinHistories[state.comparedTo]
-    //   prevState.coinHistories[state.comparedCoin]
+    !!prevState.coinHistories &&
+    prevState.coinHistories[state.comparedTo] ===
+      state.coinHistories[state.comparedTo]
   ) {
     return
   }
@@ -57,7 +57,6 @@ function renderChart (state) {
     const comparedHistory = state.coinHistories[state.comparedTo]
     let comparedBeginningPrice = null
 
-    // Start from the first date that is greater or equal than the first c50index date
     for (const comparedCoin of comparedHistory.sort(
       (a, b) => Number(a.time_unix) - Number(b.time_unix)
     )) {
@@ -78,16 +77,18 @@ function renderChart (state) {
 
   return new window.Chartist.Line(
     '.ct-chart',
-    { series: series },
+    {
+      series: series
+    },
     {
       showLine: true,
+
       axisX: {
         showLabel: false,
-        offset: 0
+        type: window.Chartist.AutoScaleAxis // This plots an offset for the x
       },
       axisY: {
-        showLabel: true,
-        offset: 0
+        showLabel: false
       }
     }
   )
@@ -99,12 +100,30 @@ export function JSChart (dispatch) {
     return m(
       'div',
       { class: 'container' },
-      m('span', { style: 'color: #2875e3; font-weight: 700;' }, 'C50Index'),
+      m(
+        'span',
+        {},
+        m('img', {
+          src: `https://cdn.answrly.com/c50/logos/c-c50-logo.png`,
+          width: 32,
+          height: 32
+        }),
+        m('span', { style: 'color: #2875e3; font-weight: 700;' }, 'C50Index')
+      ),
       ' v ',
       m(
         'span',
-        { style: 'color: #333333; font-weight: 700;' },
-        slugToHuman(state.comparedTo)
+        {},
+        m('img', {
+          src: `https://cdn.answrly.com/c50/coin-images/${
+            state.comparedTo
+          }.png`
+        }),
+        m(
+          'span',
+          { style: 'color: #333333; font-weight: 700;' },
+          slugToHuman(state.comparedTo)
+        )
       ),
       m('div', { class: 'ct-chart' })
     )
