@@ -23,7 +23,7 @@
     var tid = setInterval(function () {
       if (document.readyState !== 'complete') return;
       clearInterval(tid);
-      new MarkactRoot("app");
+      new MarkactRoot("app", parseQuery(location.search));
     }, 100);
   </script>
 </body>

@@ -1,4 +1,4 @@
-import { reducerChain, computedFor, subReducersFor } from './core/reducers.js'
+import { reducerChain, subReducersFor } from './core/reducers.js'
 import { getCoreServices } from './core/services/services.js'
 import { RootPage } from './views/root-page.js'
 import { initialState } from './state.js'
@@ -8,7 +8,8 @@ import { reduceToggles } from './reducers/subreducers/toggles-reducer.js'
 import { reduceInitialLoading } from './reducers/initial-loading-reducer.js'
 import { reduceCoins } from './reducers/coin-reducer.js'
 
-window.MarkactRoot = function (id) {
+window.MarkactRoot = function (id, options = {}) {
+  /*global self, this */
   self = this
   self.id = id
   self.state = { ...initialState }
@@ -64,9 +65,6 @@ window.MarkactRoot = function (id) {
       self.root,
       document.getElementById('main')
     )
-    // renderAt(RootPageContent({
-    //   ...self.state
-    // }), self.id)
   }
 
   let installingServices = true
