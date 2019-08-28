@@ -20,12 +20,18 @@
 <body>
   <div id='app'></div>
   <script>
-    function parseQuery (queryString) {
+    function parseQuery(queryString) {
       const query = {}
       const pairs = (queryString[0] === '?' ? queryString.substr(1) : queryString).split('&')
       for (let i = 0; i < pairs.length; i++) {
         const pair = pairs[i].split('=')
-        query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '')
+        let value = decodeURIComponent(pair[1] || '');
+        if (value === "true") {
+          value = true;
+        } else if (value === "false") {
+          value = false
+        }
+        query[decodeURIComponent(pair[0])] = value
       }
       return query
     }

@@ -8,11 +8,15 @@ import { reduceToggles } from './reducers/subreducers/toggles-reducer.js'
 import { reduceInitialLoading } from './reducers/initial-loading-reducer.js'
 import { reduceCoins } from './reducers/coin-reducer.js'
 
+// options: {showChart: boolean}
 window.MarkactRoot = function (id, options = {}) {
-  /*global self, this */
+  /* global self, this */
   self = this
   self.id = id
-  self.state = { ...initialState, options: { ...options } }
+
+  self.state = { ...initialState }
+  self.state.options = { ...self.state.options, ...options }
+  console.log(self.state)
 
   self.root = document.getElementById(self.id)
 
@@ -38,7 +42,7 @@ window.MarkactRoot = function (id, options = {}) {
       return
     }
     const startTimings = Date.now()
-    console.log('action', action)
+    // console.log('action', action)
 
     const oldState = { ...self.state }
     const reduction = self.reduce(oldState, action)
@@ -48,17 +52,17 @@ window.MarkactRoot = function (id, options = {}) {
       self.reduceEffects(reduction.effects)
     }
 
-    console.log('new state', self.state)
+    // console.log('new state', self.state)
     const startRenderTime = Date.now()
     if (oldState !== self.state) {
       self.render()
     }
     const renderTime = Date.now() - startRenderTime
-    console.log('rendered in', renderTime, 'ms')
-    console.log('co/mpleted in', Date.now() - startTimings, 'ms')
-    if (renderTime > 50) {
-      console.warn('Slow action:  ', renderTime + 'ms', action)
-    }
+    // console.log('rendered in', renderTime, 'ms')
+    // console.log('co/mpleted in', Date.now() - startTimings, 'ms')
+    // if (renderTime > 50) {
+    //   console.warn('Slow action:  ', renderTime + 'ms', action)
+    // }
   }
   self.render = function () {
     const RootPageContent = RootPage(self.dispatch)

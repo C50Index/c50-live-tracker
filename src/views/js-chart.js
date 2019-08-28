@@ -97,9 +97,7 @@ function renderChart (state) {
 export function JSChart (dispatch) {
   return state => {
     renderChart(state)
-    return m(
-      'div',
-      { class: 'container' },
+    return (
       m(
         'span',
         {},
