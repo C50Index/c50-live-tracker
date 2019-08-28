@@ -10,6 +10,7 @@ import { reduceCoins } from './reducers/coin-reducer.js'
 
 window.MarkactRoot = function (id, options = {}) {
   /*global self, this */
+  console.log("OPTIONS!!", options)
   self = this
   self.id = id
   self.state = { ...initialState }
@@ -30,6 +31,8 @@ window.MarkactRoot = function (id, options = {}) {
   }
 
   const queuedActions = []
+  const queuedEffects = []
+
   self.dispatch = function (action) {
     if (installingServices) {
       queuedActions.push(action)
