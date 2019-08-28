@@ -19,5 +19,17 @@ What is rendered on the screen can be controlled with URL param options:
 ```
 
 ### Show Graph Only
-
+https://c50index.github.io/c50-live-tracker//?full_screen=true&show_c50_index=false&show_coin_table=false&show_graph=true&show_header=false
 `?full_screen=true&show_c50_index=false&show_coin_table=false&show_graph=true&show_header=false`
+
+### Show C50 Index Only
+
+https://c50index.github.io/c50-live-tracker/?full_screen=true&show_c50_index=true&show_coin_table=false&show_graph=false&show_header=false
+
+`?full_screen=true&show_c50_index=true&show_coin_table=false&show_graph=false&show_header=false`
+
+### SHow C50 Index and Graph No Table
+
+https://c50index.github.io/c50-live-tracker/?full_screen=true&show_c50_index=true&show_coin_table=false&show_graph=true&show_header=false
+`?full_screen=true&show_c50_index=true&show_coin_table=false&show_graph=true&show_header=false`
+
