@@ -30,9 +30,19 @@ export function RootPage (dispatch) {
       state.options.show_c50_index &&
         m(
           'div',
-          { class: 'tc lead' },
-          m('div', {}, `C50 Index: ${totalMarketcap / MARKET_WEIGHTED_DIVISOR}`)
+          { class: 'tc' },
+          m('img', {
+            src: `https://cdn.answrly.com/c50/logos/c-c50-logo.png`,
+            width: 32,
+            height: 32
+          }),
+          m(
+            'span',
+            { style: 'color: #111111; font-weight: 700;' },
+            totalMarketcap / MARKET_WEIGHTED_DIVISOR
+          )
         ),
+
       state.options.show_graph &&
         m(
           'div',
@@ -47,3 +57,8 @@ export function RootPage (dispatch) {
     )
   }
 }
+// m(
+//   'div',
+//   { class: 'tc lead' },
+//   m('div', {}, `C50 Index: ${totalMarketcap / MARKET_WEIGHTED_DIVISOR}`)
+// ),
