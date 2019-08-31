@@ -6,6 +6,8 @@
   <meta content="utf-8" http-equiv="encoding">
   <title>C50 Tracker</title>
   <link rel="stylesheet" type="text/css" href="./src/root.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
@@ -52,21 +54,79 @@
 </head>
 
 <body>
-  <h1>Embeddable C50 Index Charts</h1>
+  <h1>C50 Index Embeddable Widgets</h1>
+  <div>
+    Use this code below to embed the <a href='https://www.c50index.com'>C50 Index</a> on your site.
+  </div>
   <h2>Show C50 Index</h2>
+
 
   <div>
     <iframe height="40px" frameBorder="0"
-      src='https://live-tracker.c50index.com/?full_screen=true&show_graph=false&show_coin_table=false&full_screen=true&show_header=false' />
-  </div>
-  <div>
-    <iframe height="40px" frameBorder="0"
-      src='https://live-tracker.c50index.com/?full_screen=true&show_graph=false&show_coin_table=false&full_screen=true&show_header=false' />
-  </div>
-  <textarea>
-        <iframe height="40px" frameBorder="0"
-          src='https://live-tracker.c50index.com/?full_screen=false&show_graph=false&show_coin_table=false&full_screen=true&show_header=false' />
+      src='https://live-tracker.c50index.com/?full_screen=true&show_graph=false&show_coin_table=false&full_screen=true&show_header=false'></iframe>
+    <div>
+      <div>Embed Code</div>
+      <textarea readonly="readonly" class="form-control" style='margin-bottom: 2rem;'>
+      <iframe height="40px" frameBorder="0"
+        src='https://live-tracker.c50index.com/?full_screen=true&show_graph=false&show_coin_table=false&full_screen=true&show_header=false'></iframe>
     </textarea>
+    </div>
+  </div>
+
+  <h2>Show Graph of C50 Index Only</h2>
+
+  <div>
+    <iframe height="250px" width="600px" frameBorder="0"
+      src='https://live-tracker.c50index.com/?full_screen=true&show_graph=true&show_coin_table=false&full_screen=true&show_header=false&show_c50_index=false'></iframe>
+
+    <div>
+      <div>Embed Code</div>
+
+      <textarea readonly="readonly" class='form-control' style='margin-bottom: 2rem;'>
+    <iframe height="250px" width="600px" frameBorder="0"
+      src='https://live-tracker.c50index.com/?full_screen=true&show_graph=true&show_coin_table=false&full_screen=true&show_header=false&show_c50_index=false'></iframe>
+      </textarea>
+    </div>
+  </div>
+
+  <h2 id='comparedHeader'>Show Graph of C50 Index Compared to Bitcoin</h2>
+
+  <div>
+    <iframe height="250px" width="600px" frameBorder="0" id='comparedToIframe'
+      src='https://live-tracker.c50index.com/?full_screen=true&show_graph=true&show_coin_table=false&full_screen=true&show_header=false&show_c50_index=false&compared_to=bitcoin'></iframe>
+
+    <div>
+      <div>Embed Code</div>
+
+      <textarea readonly="readonly" id='comparedToTextarea' class='form-control' style='margin-bottom: 2rem;'>
+    <iframe height="250px" width="600px" frameBorder="0"
+      src='https://live-tracker.c50index.com/?full_screen=true&show_graph=true&show_coin_table=false&full_screen=true&show_header=false&show_c50_index=false&compared_to=bitcoin'></iframe>
+          </textarea>
+    </div>
+  </div>
+
+  <script>
+    function updateComparedTo(e) {
+      const slugs = ["cardano", "aeternity", "basic-attention-token", "bitcoin-diamond", "bitcoin-cash", "bytecoin-bcn", "binance-coin", "bitcoin", "bitcoin-gold", "bytom", "bitshares", "cryptonex", "dash", "dogecoin", "eos", "ethereum-classic", "ethereum", "golem-network-tokens", "holo", "huobi-token", "icon", "iostoken", "chainlink", "lisk", "litecoin", "iota", "nano", "neo", "pundi-x", "omisego", "ontology", "project-pai", "populous", "qtum", "augur", "siacoin", "status", "steem", "stratis", "tron", "wanchain", "waves", "waltonchain", "nem", "stellar", "monero", "ripple", "verge", "zcash", "zilliqa"];
+
+      let comparedToCoin = (e && e.target.value) || 'bitcoin';
+
+      const comparedHeaderH2 = document.getElementById('comparedHeader');
+      const comparedToIframe = document.getElementById('comparedToIframe');
+      const comparedToTextarea = document.getElementById('comparedToTextarea');
+
+      const optionsString = slugs.map((slug) => `<option value=${slug} ${slug === comparedToCoin ? 'selected' : ''}>${slug}</option>`).join("");
+      comparedHeaderH2.innerHTML = `Show Graph of C50 Index Compared to <select onchange='updateComparedTo(event)' class='form-control'>${optionsString}</select>`
+      comparedToIframe.src = `https://live-tracker.c50index.com/?full_screen=true&show_graph=true&show_coin_table=false&full_screen=true&show_header=false&show_c50_index=false&compared_to=${comparedToCoin}`
+      comparedToTextarea.innerText = comparedToIframe.outerHTML
+    }
+
+    window.onload = () => {
+      updateComparedTo()
+    }
+
+  </script>
+
 </body>
 
 </html>
