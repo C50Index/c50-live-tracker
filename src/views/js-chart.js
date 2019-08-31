@@ -76,19 +76,23 @@ function renderChart (state) {
   }
 
   return new window.Chartist.Line(
-    '.ct-chart',
+    '#theChart',
     {
       series: series
     },
     {
-      showLine: true,
-
       axisX: {
-        showLabel: false,
-        type: window.Chartist.AutoScaleAxis // This plots an offset for the x
+        showLabel: true,
+        type: window.Chartist.AutoScaleAxis, // This plots an offset for the x
+        labelInterpolationFnc: function (timeUnix) {
+          return new Date(timeUnix * 1000).toLocaleDateString('en-us', {
+            year: 'numeric',
+            month: 'short'
+          })
+        }
       },
       axisY: {
-        showLabel: false
+        showLabel: true
       }
     }
   )
@@ -97,7 +101,10 @@ function renderChart (state) {
 export function JSChart (dispatch) {
   return state => {
     renderChart(state)
-    return (
+
+    return m(
+      'div',
+      { class: 'tc' },
       m(
         'span',
         {},
@@ -119,11 +126,13 @@ export function JSChart (dispatch) {
         }),
         m(
           'span',
-          { style: 'color: #333333; font-weight: 700;' },
+          {
+            style: `color: #333333; font-weight: 700;`
+          },
           slugToHuman(state.comparedTo)
         )
       ),
-      m('div', { class: 'ct-chart' })
+      m('div', { id: 'theChart', class: 'pa1' })
     )
   }
 }

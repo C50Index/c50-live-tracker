@@ -30,6 +30,10 @@
   cursor: pointer;
 }
 
+.pa1 {
+  padding: 1rem;
+}
+
 .hover-fill-blue:hover {
   fill: #03a9f4;
 }
@@ -44,14 +48,15 @@
 
 .ct-series-a .ct-line, .ct-series-a .ct-point {
   stroke: #2875e3;
-  stroke-width: 5px;
+  stroke-width: 2px;
 }
 
 .ct-series-b .ct-line, .ct-series-b .ct-point {
   stroke: #333333;
-  stroke-width: 5px;
+  stroke-width: 2px;
 }
 
-.ct-grids {
-  display: none;
+.ct-horizontal {
+  transform: rotate(-70deg);
+  -webkit-transform: rotate(-70deg);
 }

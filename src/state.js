@@ -7,7 +7,7 @@ export const initialState = {
   options: {
     show_graph: true, // Show Coin graph
     show_coin_table: true, // Show coin summary table
-    full_screen: false, // Make full screen
+    full_screen: true, // Make full screen
     show_header: true, // Show Summary header
     show_c50_index: true // Show live c50 index number
   }
