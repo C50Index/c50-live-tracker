@@ -105,19 +105,27 @@ export function reduceCoins (state, action) {
       break
 
     case 'update-compared-to':
-      state = { ...state }
-      state.comparedTo = action.slug
+      ;({ state, effects } = setupComparedToCoin(action.slug, state))
 
-      // Don't reload the data if we already have it
-      if (!state.coinHistories[state.comparedTo]) {
-        effects = effects.concat(loadCoinHistory(action.slug))
-      }
       break
   }
   return {
     state,
     effects
   }
+}
+
+export function setupComparedToCoin (slug, state) {
+  let effects = []
+  state = { ...state }
+  state.options = { ...state.options }
+  state.options.compared_to = slug
+
+  // Don't reload the data if we already have it
+  if (!state.coinHistories[state.compared_to]) {
+    effects = effects.concat(loadCoinHistory(slug))
+  }
+  return { state, effects }
 }
 
 /**

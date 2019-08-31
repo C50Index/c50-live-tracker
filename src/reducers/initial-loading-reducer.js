@@ -10,7 +10,7 @@ export function reduceInitialLoading (state, action) {
         state.initialLoad = false
         effects = effects.concat(loadTrackerSummary())
         effects = effects.concat(loadC50CSV())
-        effects = effects.concat(loadCoinHistory(state.comparedTo))
+        effects = effects.concat(loadCoinHistory(state.options.compared_to))
       }
       break
   }

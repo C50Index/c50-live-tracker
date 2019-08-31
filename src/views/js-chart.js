@@ -12,11 +12,11 @@ function renderChart (state) {
   if (
     !!prevState &&
     state.c50Summary === prevState.c50Summary &&
-    state.comparedTo === prevState.comparedTo &&
+    state.options.compared_to === prevState.options.compared_to &&
     !!state.coinHistories &&
     !!prevState.coinHistories &&
-    prevState.coinHistories[state.comparedTo] ===
-      state.coinHistories[state.comparedTo]
+    prevState.coinHistories[state.options.compared_to] ===
+      state.coinHistories[state.options.compared_to]
   ) {
     return
   }
@@ -49,12 +49,13 @@ function renderChart (state) {
 
   // render the compared data if it exists
   if (
+    !!state.options.compared_to &&
     state.coinHistories &&
-    state.coinHistories[state.comparedTo] &&
+    state.coinHistories[state.options.compared_to] &&
     c50IndexData.length > 0
   ) {
     const comparedData = []
-    const comparedHistory = state.coinHistories[state.comparedTo]
+    const comparedHistory = state.coinHistories[state.options.compared_to]
     let comparedBeginningPrice = null
 
     for (const comparedCoin of comparedHistory.sort(
@@ -115,23 +116,24 @@ export function JSChart (dispatch) {
         }),
         m('span', { style: 'color: #2875e3; font-weight: 700;' }, 'C50Index')
       ),
-      ' v ',
-      m(
-        'span',
-        {},
-        m('img', {
-          src: `https://cdn.answrly.com/c50/coin-images/${
-            state.comparedTo
-          }.png`
-        }),
+      state.options.compared_to &&
         m(
           'span',
-          {
-            style: `color: #333333; font-weight: 700;`
-          },
-          slugToHuman(state.comparedTo)
-        )
-      ),
+          {},
+          ' v ',
+          m('img', {
+            src: `https://cdn.answrly.com/c50/coin-images/${
+              state.options.compared_to
+            }.png`
+          }),
+          m(
+            'span',
+            {
+              style: `color: #333333; font-weight: 700;`
+            },
+            slugToHuman(state.options.compared_to)
+          )
+        ),
       m('div', { id: 'theChart', class: 'pa1' })
     )
   }
