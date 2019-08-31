@@ -9,12 +9,33 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    @import 'https://fonts.googleapis.com/css?family=Roboto:300,400,500';
+
     body {
       margin: 0 auto;
       max-width: 50em;
-      font-family: "Helvetica", "Arial", sans-serif;
+      font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+
       color: #555;
 
+    }
+
+    code,
+    pre {
+      background: #eee;
+    }
+
+    code {
+      padding: 2px 4px;
+      vertical-align: text-bottom;
+    }
+
+    pre {
+      padding: 1em;
+    }
+
+    a {
+      color: #e81c4f;
     }
 
     h1,
@@ -33,8 +54,15 @@
 <body>
   <h1>Embeddable C50 Index Charts</h1>
   <h2>Show C50 Index</h2>
-  <iframe height="40px" frameBorder="0"
-    src='https://live-tracker.c50index.com/?full_screen=false&show_graph=false&show_coin_table=false&full_screen=true&show_header=false' />
+
+  <div>
+    <iframe height="40px" frameBorder="0"
+      src='https://live-tracker.c50index.com/?full_screen=true&show_graph=false&show_coin_table=false&full_screen=true&show_header=false' />
+  </div>
+  <div>
+    <iframe height="40px" frameBorder="0"
+      src='https://live-tracker.c50index.com/?full_screen=true&show_graph=false&show_coin_table=false&full_screen=true&show_header=false' />
+  </div>
   <textarea>
         <iframe height="40px" frameBorder="0"
           src='https://live-tracker.c50index.com/?full_screen=false&show_graph=false&show_coin_table=false&full_screen=true&show_header=false' />

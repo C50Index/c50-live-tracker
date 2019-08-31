@@ -122,7 +122,7 @@ export function setupComparedToCoin (slug, state) {
   state.options.compared_to = slug
 
   // Don't reload the data if we already have it
-  if (!state.coinHistories[state.compared_to]) {
+  if (slug && !state.coinHistories[state.options.compared_to]) {
     effects = effects.concat(loadCoinHistory(slug))
   }
   return { state, effects }
