@@ -14,7 +14,8 @@ What is rendered on the screen can be controlled with URL param options:
     show_coin_table: true, // Show coin summary table
     full_screen: false, // Make full screen
     show_header: true, // Show Summary header
-    show_c50_index: true // Show live c50 index number
+    show_c50_index: true, // Show live c50 index number
+    compared_to: '' // Don't compare to anything by default
   }
 ```
 
