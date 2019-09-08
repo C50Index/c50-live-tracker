@@ -1,7 +1,6 @@
 import { JSChart } from './js-chart.js'
 import { CoinTable } from './coin-table.js'
 import { TrackerHeader } from './tracker-header.js'
-// import { CoinSummaryKey, MarketWeightedDivisor } from '../state.js'
 import { IndexValue } from './index-value.js'
 
 const m = window.preact.h

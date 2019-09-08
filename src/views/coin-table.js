@@ -1,6 +1,6 @@
 import { updateComparedTo } from '../reducers/coin-reducer.js'
 import { slugToHuman } from '../utils/slug-utils.js'
-import { CoinSummaryKey } from '../state.js'
+import { IndexData } from '../state.js'
 
 const m = window.preact.h
 
@@ -82,7 +82,7 @@ export function CoinTable (dispatch) {
   return state => {
     const summaries = []
     let loading = false
-    const key = CoinSummaryKey[state.currentIndex]
+    const key = IndexData[state.options.current_index].summaryKey
     for (const slug in state[key]) {
       const summary = state[key][slug]
       if (!state[key][slug].marketcap) {

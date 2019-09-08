@@ -26,7 +26,7 @@ export function loadc50TrackerSummary () {
   const config = {}
   config.url = 'https://cdn.answrly.com/c50/all-coins/c50-tracker-summary.csv'
   config.method = 'get'
-  return requestAjax([RequestName.loadc50TrackerSummary], config)
+  return requestAjax([RequestName.loadC50TrackerSummary], config)
 }
 
 export function loadc20TrackerSummary () {

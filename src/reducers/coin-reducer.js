@@ -1,7 +1,7 @@
 import { createWS } from '../core/services/ws.js'
 import { requestAjax } from '../core/services/ajax-service.js'
 import { parseCSV } from '../utils/csv-utils.js'
-import { CoinSummaryKey, RequestName } from '../state.js'
+import { IndexData, RequestName } from '../state.js'
 
 export function updateComparedTo (slug) {
   return {
@@ -36,7 +36,7 @@ export function reduceCoins (state, action) {
     case 'ws-message':
       if (action.name[0] === RequestName.wsCoinUpdate) {
         const prices = JSON.parse(action.data.data)
-        const key = CoinSummaryKey[state.currentIndex]
+        const key = IndexData[state.options.current_index].summaryKey
         state = { ...state }
         state[key] = { ...state[key] }
         console.log('Count', key, Object.keys(state[key]).length)
@@ -57,7 +57,7 @@ export function reduceCoins (state, action) {
     case 'complete-request':
       if (action.name[0] === RequestName.loadCoinCapAssets) {
         if (action.success) {
-          const key = CoinSummaryKey[state.currentIndex]
+          const key = IndexData[state.options.current_index].summaryKey
 
           state = { ...state }
           state[key] = { ...state[key] }
@@ -91,7 +91,7 @@ export function reduceCoins (state, action) {
           state.c50CoinSummaries = parseTrackerSummary(action.response)
 
           const slugs = Object.keys(state.c50CoinSummaries).join(',')
-          console.log('c50', state.c50CoinSummaries)
+          console.log('c50', slugs.length)
 
           effects = effects.concat(loadCoinCapAssets(slugs))
         }

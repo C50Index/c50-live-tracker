@@ -12,24 +12,22 @@ export const initialState = {
     show_header: true, // Show Summary header
     show_c50_index: true, // Show live c50 index number
     show_c50_index_image: false, // Show Image next to c50 index
-    compared_to: '' // What we are comparing the c50index to
+    compared_to: '', // What we are comparing the c50index to
+    current_index: 'c20'
+  }
+}
+
+export const IndexData = {
+  c50: {
+    summaryKey: 'c20CoinSummaries',
+    marketWeightedDivisor: 214570583.32,
+    dataKey: 'c50Data'
   },
-  currentIndex: 'c20' // c20 | c50
-}
-
-export const CoinSummaryKey = {
-  c50: 'c50CoinSummaries',
-  c20: 'c20CoinSummaries'
-}
-
-export const DataKey = {
-  c50: 'c50Data',
-  c20: 'c20Data'
-}
-
-export const MarketWeightedDivisor = {
-  c50: 214570583.32,
-  c20: 24359904.42
+  c20: {
+    summaryKey: 'c50CoinSummaries',
+    marketWeightedDivisor: 24359904.42,
+    dataKey: 'c20Data'
+  }
 }
 
 export const RequestName = {

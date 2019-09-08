@@ -1,6 +1,6 @@
 import { dateToUnix } from '../utils/date-utils.js'
 import { slugToHuman } from '../utils/slug-utils.js'
-import { DataKey } from '../state.js'
+import { IndexData } from '../state.js'
 
 const m = window.preact.h
 let prevState = null
@@ -16,7 +16,7 @@ function getIndexName (currentIndex) {
 }
 
 function renderChart (state) {
-  const dataKey = DataKey[state.currentIndex]
+  const dataKey = IndexData[state.options.current_index].dataKey
 
   if (!state[dataKey]) return
   if (!state[dataKey].map) return
@@ -36,7 +36,8 @@ function renderChart (state) {
 
   prevState = state
 
-  const beginningPrice = state[dataKey][0][getIndexName(state.currentIndex)]
+  const beginningPrice =
+    state[dataKey][0][getIndexName(state.options.current_index)]
 
   const series = []
 
@@ -51,7 +52,8 @@ function renderChart (state) {
     const summary = state[dataKey][i]
     const timeUnix = dateToUnix(new Date(summary.Date))
     const price =
-      (Number(summary[getIndexName(state.currentIndex)]) - beginningPrice) /
+      (Number(summary[getIndexName(state.options.current_index)]) -
+        beginningPrice) /
       beginningPrice
 
     c50IndexData.push({
@@ -131,7 +133,7 @@ export function JSChart (dispatch) {
         m(
           'span',
           { style: 'color: #2875e3; font-weight: 700;' },
-          getIndexName(state.currentIndex)
+          getIndexName(state.options.current_index)
         )
       ),
       state.options.compared_to &&

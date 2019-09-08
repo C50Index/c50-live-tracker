@@ -1,10 +1,10 @@
-import { CoinSummaryKey, MarketWeightedDivisor } from '../state.js'
+import { IndexData } from '../state.js'
 const m = window.preact.h
 
 export function IndexValue (dispatch) {
   return state => {
     let totalMarketcap = 0
-    const key = CoinSummaryKey[state.currentIndex]
+    const key = IndexData[state.options.current_index].summaryKey
     for (const slug in state[key]) {
       const summary = state[key][slug]
       if (!state[key][slug].marketcap) {
@@ -25,7 +25,10 @@ export function IndexValue (dispatch) {
       m(
         'span',
         { style: 'color: #111111; font-weight: 700;' },
-        (totalMarketcap / MarketWeightedDivisor[state.currentIndex]).toFixed(2)
+        (
+          totalMarketcap /
+          IndexData[state.options.current_index].marketWeightedDivisor
+        ).toFixed(2)
       )
     )
   }

@@ -15,7 +15,8 @@ export function TrackerHeader (dispatch) {
         })
       ),
       m('h2', {}, 'C50 Tracker'),
-      m('p', { class: 'lead' }, '50 Cryptos in 1')
+      m('p', { class: 'lead' }, '50 Cryptos in 1'),
+      m('ul', { class: 'nav' }, m('li', { class: 'nav-item' }))
     )
   }
 }
