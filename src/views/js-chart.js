@@ -1,17 +1,30 @@
 import { dateToUnix } from '../utils/date-utils.js'
 import { slugToHuman } from '../utils/slug-utils.js'
+import { DataKey } from '../state.js'
 
 const m = window.preact.h
 let prevState = null
 
+function getIndexName (currentIndex) {
+  switch (currentIndex) {
+    case 'c50':
+      return 'C50Index'
+    case 'c20':
+      return 'C20Index'
+  }
+  return 'C50Index'
+}
+
 function renderChart (state) {
-  if (!state.c50Summary) return
-  if (!state.c50Summary.map) return
+  const dataKey = DataKey[state.currentIndex]
+
+  if (!state[dataKey]) return
+  if (!state[dataKey].map) return
 
   // memoize the state, don't re-render if nothing has changed :)
   if (
     !!prevState &&
-    state.c50Summary === prevState.c50Summary &&
+    state[dataKey] === prevState[dataKey] &&
     state.options.compared_to === prevState.options.compared_to &&
     !!state.coinData &&
     !!prevState.coinData &&
@@ -23,7 +36,7 @@ function renderChart (state) {
 
   prevState = state
 
-  const beginningPrice = state.c50Summary[0]['C50Index']
+  const beginningPrice = state[dataKey][0][getIndexName(state.currentIndex)]
 
   const series = []
 
@@ -34,11 +47,12 @@ function renderChart (state) {
 
   const c50IndexData = [] // The c50IndexData for the chart
 
-  for (let i = 0; i < state.c50Summary.length - 1; i++) {
-    const summary = state.c50Summary[i]
+  for (let i = 0; i < state[dataKey].length - 1; i++) {
+    const summary = state[dataKey][i]
     const timeUnix = dateToUnix(new Date(summary.Date))
     const price =
-      (Number(summary['C50Index']) - beginningPrice) / beginningPrice
+      (Number(summary[getIndexName(state.currentIndex)]) - beginningPrice) /
+      beginningPrice
 
     c50IndexData.push({
       x: timeUnix,
@@ -114,7 +128,11 @@ export function JSChart (dispatch) {
           width: 32,
           height: 32
         }),
-        m('span', { style: 'color: #2875e3; font-weight: 700;' }, 'C50Index')
+        m(
+          'span',
+          { style: 'color: #2875e3; font-weight: 700;' },
+          getIndexName(state.currentIndex)
+        )
       ),
       state.options.compared_to &&
         m(

@@ -1,11 +1,39 @@
 import { requestAjax } from '../core/services/ajax-service.js'
 import { RequestName } from '../state.js'
+import { parseCSV } from '../utils/csv-utils.js'
 
 export function reduceChart (state, action) {
   let effects = []
 
   switch (action.type) {
     case 'complete-request':
+      if (action.name[0] === RequestName.loadCoinHistory) {
+        if (action.success) {
+          const slug = action.name[1]
+          state = { ...state }
+          state.coinData = { ...state.coinData }
+          state.coinData[slug] = parseCSV(action.response, {
+            headers: true
+          })
+        }
+      } else if (action.name[0] === RequestName.loadC50Data) {
+        if (action.success) {
+          state = { ...state }
+          state.c50Data = { ...state.c50Data }
+          state.c50Data = parseCSV(action.response, {
+            headers: true
+          })
+        }
+      } else if (action.name[0] === RequestName.loadC20Data) {
+        if (action.success) {
+          state = { ...state }
+          state.c20Data = { ...state.c20Data }
+          state.c20Data = parseCSV(action.response, {
+            headers: true
+          })
+        }
+      }
+
       break
 
     case 'update-compared-to':

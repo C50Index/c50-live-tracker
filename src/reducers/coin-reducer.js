@@ -105,17 +105,7 @@ export function reduceCoins (state, action) {
           const slugs = Object.keys(state.c20CoinSummaries).join(',')
           effects = effects.concat(loadCoinCapAssets(slugs))
         }
-      } else if (action.name[0] === RequestName.loadCoinHistory) {
-        if (action.success) {
-          const slug = action.name[1]
-          state = { ...state }
-          state.coinData = { ...state.coinData }
-          state.coinData[slug] = parseCSV(action.response, {
-            headers: true
-          })
-        }
       }
-      break
   }
   return {
     state,

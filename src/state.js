@@ -22,6 +22,11 @@ export const CoinSummaryKey = {
   c20: 'c20CoinSummaries'
 }
 
+export const DataKey = {
+  c50: 'c50Data',
+  c20: 'c20Data'
+}
+
 export const MarketWeightedDivisor = {
   c50: 214570583.32,
   c20: 24359904.42
