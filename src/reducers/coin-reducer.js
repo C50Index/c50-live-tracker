@@ -65,6 +65,8 @@ export function reduceCoins (state, action) {
       state = { ...state }
       state.options = { ...state.options }
       state.options.current_index = action.name
+      console.log('state', state)
+      console.log('c50', Object.keys(state.c50CoinSummaries).length)
       break
 
     case 'complete-request':
@@ -75,12 +77,6 @@ export function reduceCoins (state, action) {
 
           state = { ...state }
           state[key] = { ...state[key] }
-          console.log(
-            'original',
-            key,
-            state[key],
-            Object.keys(state[key]).length
-          )
           const coins = JSON.parse(action.response)
           for (const coin of coins.data) {
             const slug = coin.id

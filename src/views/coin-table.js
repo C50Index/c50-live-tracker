@@ -81,18 +81,14 @@ export function CoinTable (dispatch) {
 
   return state => {
     const summaries = []
-    let loading = false
     const key = IndexData[state.options.current_index].summaryKey
     for (const slug in state[key]) {
       const summary = state[key][slug]
-      if (!state[key][slug].marketcap) {
-        loading = true
-        break
-      }
+      // if (!state[key][slug].marketcap) {
+      //   break
+      // }
       summaries.push(summary)
     }
-
-    if (state.initialLoad && loading) return m('div', {}, 'Loading...')
 
     return m(
       'table',

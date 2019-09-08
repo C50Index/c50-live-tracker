@@ -39,7 +39,7 @@ function renderChart (state) {
 
   const c50IndexData = [] // The c50IndexData for the chart
 
-  for (let i = 0; i < state[dataKey].length - 1; i++) {
+  for (let i = 0; i < state[dataKey].length; i++) {
     const summary = state[dataKey][i]
     const timeUnix = dateToUnix(new Date(summary.Date))
     const price =
