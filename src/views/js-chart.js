@@ -5,16 +5,6 @@ import { IndexData } from '../state.js'
 const m = window.preact.h
 let prevState = null
 
-function getIndexName (currentIndex) {
-  switch (currentIndex) {
-    case 'c50':
-      return 'C50Index'
-    case 'c20':
-      return 'C20Index'
-  }
-  return 'C50Index'
-}
-
 function renderChart (state) {
   const dataKey = IndexData[state.options.current_index].dataKey
 
@@ -29,7 +19,8 @@ function renderChart (state) {
     !!state.coinData &&
     !!prevState.coinData &&
     prevState.coinData[state.options.compared_to] ===
-      state.coinData[state.options.compared_to]
+      state.coinData[state.options.compared_to] &&
+    state.options.current_index === prevState.options.current_index
   ) {
     return
   }
@@ -37,7 +28,7 @@ function renderChart (state) {
   prevState = state
 
   const beginningPrice =
-    state[dataKey][0][getIndexName(state.options.current_index)]
+    state[dataKey][0][IndexData[state.options.current_index].name]
 
   const series = []
 
@@ -52,7 +43,7 @@ function renderChart (state) {
     const summary = state[dataKey][i]
     const timeUnix = dateToUnix(new Date(summary.Date))
     const price =
-      (Number(summary[getIndexName(state.options.current_index)]) -
+      (Number(summary[IndexData[state.options.current_index].name]) -
         beginningPrice) /
       beginningPrice
 
@@ -133,7 +124,7 @@ export function JSChart (dispatch) {
         m(
           'span',
           { style: 'color: #2875e3; font-weight: 700;' },
-          getIndexName(state.options.current_index)
+          IndexData[state.options.current_index].name
         )
       ),
       state.options.compared_to &&

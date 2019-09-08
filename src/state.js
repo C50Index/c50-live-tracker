@@ -19,14 +19,16 @@ export const initialState = {
 
 export const IndexData = {
   c50: {
-    summaryKey: 'c20CoinSummaries',
+    summaryKey: 'c50CoinSummaries',
     marketWeightedDivisor: 214570583.32,
-    dataKey: 'c50Data'
+    dataKey: 'c50Data',
+    name: 'C50Index'
   },
   c20: {
-    summaryKey: 'c50CoinSummaries',
+    summaryKey: 'c20CoinSummaries',
     marketWeightedDivisor: 24359904.42,
-    dataKey: 'c20Data'
+    dataKey: 'c20Data',
+    name: 'C20Index'
   }
 }
 

@@ -1,6 +1,12 @@
+import { IndexData } from '../state.js'
+import { setCurrentIndex } from '../reducers/coin-reducer.js'
+
 const m = window.preact.h
 
 export function TrackerHeader (dispatch) {
+  const dispatcher = {
+    setCurrentIndex: name => dispatch(setCurrentIndex(name))
+  }
   return state => {
     return m(
       'div',
@@ -16,7 +22,26 @@ export function TrackerHeader (dispatch) {
       ),
       m('h2', {}, 'C50 Tracker'),
       m('p', { class: 'lead' }, '50 Cryptos in 1'),
-      m('ul', { class: 'nav' }, m('li', { class: 'nav-item' }))
+      m(
+        'ul',
+        { class: 'nav nav-tabs' },
+        Object.keys(IndexData).map(currentIndex => {
+          return m(
+            'li',
+            { class: 'nav-item' },
+            m(
+              'a',
+              {
+                class: `nav-link ${
+                  state.options.current_index === currentIndex ? 'active' : ''
+                }`,
+                onclick: () => dispatcher.setCurrentIndex(currentIndex)
+              },
+              currentIndex
+            )
+          )
+        })
+      )
     )
   }
 }

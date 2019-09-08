@@ -10,6 +10,13 @@ export function updateComparedTo (slug) {
   }
 }
 
+export function setCurrentIndex (name) {
+  return {
+    type: 'set-current-index',
+    name
+  }
+}
+
 function parseTrackerSummary (response) {
   // parse tracker summary csv
   if (response) {
@@ -54,14 +61,26 @@ export function reduceCoins (state, action) {
       }
       break
 
+    case 'set-current-index':
+      state = { ...state }
+      state.options = { ...state.options }
+      state.options.current_index = action.name
+      break
+
     case 'complete-request':
       if (action.name[0] === RequestName.loadCoinCapAssets) {
         if (action.success) {
-          const key = IndexData[state.options.current_index].summaryKey
+          const indexName = action.name[1]
+          const key = IndexData[indexName].summaryKey
 
           state = { ...state }
           state[key] = { ...state[key] }
-          console.log('original', state[key], Object.keys(state[key]).length)
+          console.log(
+            'original',
+            key,
+            state[key],
+            Object.keys(state[key]).length
+          )
           const coins = JSON.parse(action.response)
           for (const coin of coins.data) {
             const slug = coin.id
@@ -91,9 +110,9 @@ export function reduceCoins (state, action) {
           state.c50CoinSummaries = parseTrackerSummary(action.response)
 
           const slugs = Object.keys(state.c50CoinSummaries).join(',')
-          console.log('c50', slugs.length)
+          console.log('c50', Object.keys(state.c50CoinSummaries).length)
 
-          effects = effects.concat(loadCoinCapAssets(slugs))
+          effects = effects.concat(loadCoinCapAssets(slugs, 'c50'))
         }
       } else if (action.name[0] === RequestName.loadC20TrackerSummary) {
         // parse tracker summary csv
@@ -103,7 +122,7 @@ export function reduceCoins (state, action) {
           console.log('c20', state.c20CoinSummaries)
 
           const slugs = Object.keys(state.c20CoinSummaries).join(',')
-          effects = effects.concat(loadCoinCapAssets(slugs))
+          effects = effects.concat(loadCoinCapAssets(slugs, 'c20'))
         }
       }
   }
@@ -117,9 +136,9 @@ export function reduceCoins (state, action) {
  * https://api.coincap.io/v2/assets?ids=bitcoin,ethereum
  * @param {*} slugs comman seperated list of coin slugs
  */
-export function loadCoinCapAssets (slugs) {
+export function loadCoinCapAssets (slugs, indexName) {
   const config = {}
   config.url = `https://api.coincap.io/v2/assets?ids=${slugs}`
   config.method = 'get'
-  return requestAjax([RequestName.loadCoinCapAssets], config)
+  return requestAjax([RequestName.loadCoinCapAssets, indexName], config)
 }
