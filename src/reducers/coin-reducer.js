@@ -1,12 +1,7 @@
-import {
-  coinUpdateWs,
-  loadC50TrackerSummaryRequestName,
-  loadC20TrackerSummaryRequestName
-} from './initial-loading-reducer.js'
 import { createWS } from '../core/services/ws.js'
 import { requestAjax } from '../core/services/ajax-service.js'
 import { parseCSV } from '../utils/csv-utils.js'
-import { CoinSummaryKey } from '../state.js'
+import { CoinSummaryKey, RequestName } from '../state.js'
 
 export function updateComparedTo (slug) {
   return {
@@ -39,7 +34,7 @@ export function reduceCoins (state, action) {
   let effects = []
   switch (action.type) {
     case 'ws-message':
-      if (action.name[0] === coinUpdateWs) {
+      if (action.name[0] === RequestName.wsCoinUpdate) {
         const prices = JSON.parse(action.data.data)
         const key = CoinSummaryKey[state.currentIndex]
         state = { ...state }
@@ -60,7 +55,7 @@ export function reduceCoins (state, action) {
       break
 
     case 'complete-request':
-      if (action.name[0] === loadCoinCapAssetsRequestName) {
+      if (action.name[0] === RequestName.loadCoinCapAssets) {
         if (action.success) {
           const key = CoinSummaryKey[state.currentIndex]
 
@@ -82,14 +77,14 @@ export function reduceCoins (state, action) {
 
           effects = effects.concat(
             createWS(
-              [coinUpdateWs],
+              [RequestName.wsCoinUpdate],
               `wss://ws.coincap.io/prices?assets=${Object.keys(state[key]).join(
                 ','
               )}`
             )
           )
         }
-      } else if (action.name[0] === loadC50TrackerSummaryRequestName) {
+      } else if (action.name[0] === RequestName.loadC50TrackerSummary) {
         // parse tracker summary csv
         if (action.response) {
           state = { ...state }
@@ -100,7 +95,7 @@ export function reduceCoins (state, action) {
 
           effects = effects.concat(loadCoinCapAssets(slugs))
         }
-      } else if (action.name[0] === loadC20TrackerSummaryRequestName) {
+      } else if (action.name[0] === RequestName.loadC20TrackerSummary) {
         // parse tracker summary csv
         if (action.response) {
           state = { ...state }
@@ -110,53 +105,22 @@ export function reduceCoins (state, action) {
           const slugs = Object.keys(state.c20CoinSummaries).join(',')
           effects = effects.concat(loadCoinCapAssets(slugs))
         }
-      } else if (action.name[0] === loadCoinHistoryRequestName) {
+      } else if (action.name[0] === RequestName.loadCoinHistory) {
         if (action.success) {
           const slug = action.name[1]
           state = { ...state }
-          state.coinHistories = { ...state.coinHistories }
-          state.coinHistories[slug] = parseCSV(action.response, {
+          state.coinData = { ...state.coinData }
+          state.coinData[slug] = parseCSV(action.response, {
             headers: true
           })
         }
       }
-      break
-
-    case 'update-compared-to':
-      ;({ state, effects } = setupComparedToCoin(action.slug, state))
-
       break
   }
   return {
     state,
     effects
   }
-}
-
-export function setupComparedToCoin (slug, state) {
-  let effects = []
-  state = { ...state }
-  state.options = { ...state.options }
-  state.options.compared_to = slug
-
-  // Don't reload the data if we already have it
-  if (slug && !state.coinHistories[state.options.compared_to]) {
-    effects = effects.concat(loadCoinHistory(slug))
-  }
-  return { state, effects }
-}
-
-/**
- *
- * @param {*} slugs
- */
-
-export function loadCoinHistory (slug) {
-  const config = {}
-  config.url = `https://cdn.answrly.com/c50/all-coins/${slug}.csv`
-  config.method = 'get'
-
-  return requestAjax([loadCoinHistoryRequestName, slug], config)
 }
 
 /**
@@ -167,8 +131,5 @@ export function loadCoinCapAssets (slugs) {
   const config = {}
   config.url = `https://api.coincap.io/v2/assets?ids=${slugs}`
   config.method = 'get'
-  return requestAjax([loadCoinCapAssetsRequestName], config)
+  return requestAjax([RequestName.loadCoinCapAssets], config)
 }
-
-export const loadCoinCapAssetsRequestName = 'load-coincap-assets'
-export const loadCoinHistoryRequestName = 'load-coin-history'

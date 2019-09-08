@@ -7,6 +7,7 @@ import { reduceInputs } from './reducers/subreducers/inputs-reducer.js'
 import { reduceToggles } from './reducers/subreducers/toggles-reducer.js'
 import { reduceInitialLoading } from './reducers/initial-loading-reducer.js'
 import { reduceCoins } from './reducers/coin-reducer.js'
+import { reduceChart } from './reducers/chart-reducer.js'
 
 // options: {showChart: boolean}
 window.MarkactRoot = function (id, options = {}) {
@@ -27,6 +28,7 @@ window.MarkactRoot = function (id, options = {}) {
       .apply(subReducer('inputs', reduceInputs))
       .apply(subReducer('toggles', reduceToggles))
       .apply(reduceCoins)
+      .apply(reduceChart)
       .result()
   }
 

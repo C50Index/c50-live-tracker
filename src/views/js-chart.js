@@ -5,7 +5,6 @@ const m = window.preact.h
 let prevState = null
 
 function renderChart (state) {
-  console.log('c50summary', state.c50Summary)
   if (!state.c50Summary) return
   if (!state.c50Summary.map) return
 
@@ -14,10 +13,10 @@ function renderChart (state) {
     !!prevState &&
     state.c50Summary === prevState.c50Summary &&
     state.options.compared_to === prevState.options.compared_to &&
-    !!state.coinHistories &&
-    !!prevState.coinHistories &&
-    prevState.coinHistories[state.options.compared_to] ===
-      state.coinHistories[state.options.compared_to]
+    !!state.coinData &&
+    !!prevState.coinData &&
+    prevState.coinData[state.options.compared_to] ===
+      state.coinData[state.options.compared_to]
   ) {
     return
   }
@@ -51,12 +50,12 @@ function renderChart (state) {
   // render the compared data if it exists
   if (
     !!state.options.compared_to &&
-    state.coinHistories &&
-    state.coinHistories[state.options.compared_to] &&
+    state.coinData &&
+    state.coinData[state.options.compared_to] &&
     c50IndexData.length > 0
   ) {
     const comparedData = []
-    const comparedHistory = state.coinHistories[state.options.compared_to]
+    const comparedHistory = state.coinData[state.options.compared_to]
     let comparedBeginningPrice = null
 
     for (const comparedCoin of comparedHistory.sort(
