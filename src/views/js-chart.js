@@ -5,6 +5,7 @@ const m = window.preact.h
 let prevState = null
 
 function renderChart (state) {
+  console.log('c50summary', state.c50Summary)
   if (!state.c50Summary) return
   if (!state.c50Summary.map) return
 

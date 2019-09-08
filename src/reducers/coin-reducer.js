@@ -1,16 +1,37 @@
 import {
   coinUpdateWs,
-  loadTrackerSummaryRequestName,
-  loadC50CSVRequestName
+  loadC50TrackerSummaryRequestName,
+  loadC20TrackerSummaryRequestName
 } from './initial-loading-reducer.js'
 import { createWS } from '../core/services/ws.js'
 import { requestAjax } from '../core/services/ajax-service.js'
 import { parseCSV } from '../utils/csv-utils.js'
+import { CoinSummaryKey } from '../state.js'
 
 export function updateComparedTo (slug) {
   return {
     type: 'update-compared-to',
     slug
+  }
+}
+
+function parseTrackerSummary (response) {
+  // parse tracker summary csv
+  if (response) {
+    const coinSummaries = parseCSV(response, {
+      headers: true
+    }).reduce((summary, row) => {
+      if (!row) return summary
+      row.price = row.close
+      delete row.close
+      delete row.marketcap
+      row.previousPrice = null
+
+      summary[row.slug] = row
+
+      return summary
+    }, {})
+    return coinSummaries
   }
 }
 
@@ -20,18 +41,19 @@ export function reduceCoins (state, action) {
     case 'ws-message':
       if (action.name[0] === coinUpdateWs) {
         const prices = JSON.parse(action.data.data)
+        const key = CoinSummaryKey[state.currentIndex]
         state = { ...state }
-        state.coinSummaries = { ...state.coinSummaries }
-        for (const slug in state.coinSummaries) {
-          if (prices[slug] === state.coinSummaries[slug].previousPrice) continue
-          state.coinSummaries[slug] = { ...state.coinSummaries[slug] }
-          const previousPrice = state.coinSummaries[slug].price
-          state.coinSummaries[slug].previousPrice = previousPrice
+        state[key] = { ...state[key] }
+        console.log('Count', key, Object.keys(state[key]).length)
+        for (const slug in state[key]) {
+          if (prices[slug] === state[key][slug].previousPrice) continue
+          state[key][slug] = { ...state[key][slug] }
+          const previousPrice = state[key][slug].price
+          state[key][slug].previousPrice = previousPrice
 
           if (prices[slug]) {
-            state.coinSummaries[slug].price = prices[slug]
-            state.coinSummaries[slug].marketcap =
-              prices[slug] * state.coinSummaries[slug].supply
+            state[key][slug].price = prices[slug]
+            state[key][slug].marketcap = prices[slug] * state[key][slug].supply
           }
         }
       }
@@ -40,17 +62,20 @@ export function reduceCoins (state, action) {
     case 'complete-request':
       if (action.name[0] === loadCoinCapAssetsRequestName) {
         if (action.success) {
+          const key = CoinSummaryKey[state.currentIndex]
+
           state = { ...state }
-          state.coinSummaries = { ...state.coinSummaries }
+          state[key] = { ...state[key] }
+          console.log('original', state[key], Object.keys(state[key]).length)
           const coins = JSON.parse(action.response)
           for (const coin of coins.data) {
             const slug = coin.id
-            if (slug) {
-              state.coinSummaries[slug] = { ...state.coinSummaries[slug] }
-              for (const key in coin) {
-                state.coinSummaries[slug][key] = coin[key]
+            if (slug && state[key][slug]) {
+              state[key][slug] = { ...state[key][slug] }
+              for (const slugKey in coin) {
+                state[key][slug][slugKey] = coin[slugKey]
               }
-              state.coinSummaries[slug].marketcap =
+              state[key][slug].marketcap =
                 Number(coin['supply']) * Number(coin['priceUsd'])
             }
           }
@@ -58,39 +83,32 @@ export function reduceCoins (state, action) {
           effects = effects.concat(
             createWS(
               [coinUpdateWs],
-              `wss://ws.coincap.io/prices?assets=${Object.keys(
-                state.coinSummaries
-              ).join(',')}`
+              `wss://ws.coincap.io/prices?assets=${Object.keys(state[key]).join(
+                ','
+              )}`
             )
           )
         }
-      } else if (action.name[0] === loadTrackerSummaryRequestName) {
+      } else if (action.name[0] === loadC50TrackerSummaryRequestName) {
         // parse tracker summary csv
         if (action.response) {
-          const coinSummaries = parseCSV(action.response, {
-            headers: true
-          }).reduce((summary, row) => {
-            if (!row) return summary
-            row.price = row.close
-            delete row.close
-            delete row.marketcap
-            row.previousPrice = null
-
-            summary[row.slug] = row
-
-            return summary
-          }, {})
-
           state = { ...state }
-          state.coinSummaries = coinSummaries
-          const slugs = Object.keys(state.coinSummaries).join(',')
+          state.c50CoinSummaries = parseTrackerSummary(action.response)
+
+          const slugs = Object.keys(state.c50CoinSummaries).join(',')
+          console.log('c50', state.c50CoinSummaries)
+
           effects = effects.concat(loadCoinCapAssets(slugs))
         }
-      } else if (action.name[0] === loadC50CSVRequestName) {
-        if (action.success) {
-          const c50Summary = parseCSV(action.response, { headers: true })
+      } else if (action.name[0] === loadC20TrackerSummaryRequestName) {
+        // parse tracker summary csv
+        if (action.response) {
           state = { ...state }
-          state.c50Summary = c50Summary
+          state.c20CoinSummaries = parseTrackerSummary(action.response)
+          console.log('c20', state.c20CoinSummaries)
+
+          const slugs = Object.keys(state.c20CoinSummaries).join(',')
+          effects = effects.concat(loadCoinCapAssets(slugs))
         }
       } else if (action.name[0] === loadCoinHistoryRequestName) {
         if (action.success) {

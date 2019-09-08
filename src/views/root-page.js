@@ -1,48 +1,25 @@
 import { JSChart } from './js-chart.js'
 import { CoinTable } from './coin-table.js'
 import { TrackerHeader } from './tracker-header.js'
+// import { CoinSummaryKey, MarketWeightedDivisor } from '../state.js'
+import { IndexValue } from './index-value.js'
 
 const m = window.preact.h
-const MARKET_WEIGHTED_DIVISOR = 214570583.32
 
 export function RootPage (dispatch) {
   const ChartPage = JSChart(dispatch)
   const CoinTableContent = CoinTable(dispatch)
   const TrackerHeaderContent = TrackerHeader(dispatch)
+  const IndexValueContent = IndexValue(dispatch)
 
   return state => {
-    let loading = false
-    let totalMarketcap = 0
-    for (const slug in state.coinSummaries) {
-      const summary = state.coinSummaries[slug]
-      if (!state.coinSummaries[slug].marketcap) {
-        loading = true
-        break
-      }
-      totalMarketcap += summary.marketcap
-    }
-    if (state.initialLoad && loading) return m('div', {}, 'Loading...')
+    if (state.initialLoad) return m('div', {}, 'Loading...')
 
     return m(
       'div',
       { id: 'main' },
       state.options.show_header && TrackerHeaderContent(state),
-      state.options.show_c50_index &&
-        m(
-          'div',
-          { class: 'tc' },
-          m('img', {
-            src: `https://cdn.answrly.com/c50/logos/c-c50-logo.png`,
-            width: 32,
-            height: 32
-          }),
-          m(
-            'span',
-            { style: 'color: #111111; font-weight: 700;' },
-            totalMarketcap / MARKET_WEIGHTED_DIVISOR
-          )
-        ),
-
+      state.options.show_c50_index && IndexValueContent(state),
       state.options.show_graph &&
         m(
           'div',
@@ -57,8 +34,3 @@ export function RootPage (dispatch) {
     )
   }
 }
-// m(
-//   'div',
-//   { class: 'tc lead' },
-//   m('div', {}, `C50 Index: ${totalMarketcap / MARKET_WEIGHTED_DIVISOR}`)
-// ),

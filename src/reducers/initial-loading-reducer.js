@@ -8,8 +8,8 @@ export function reduceInitialLoading (state, action) {
       if (state.initialLoad) {
         state = { ...state }
         state.initialLoad = false
-        effects = effects.concat(loadTrackerSummary())
-        effects = effects.concat(loadC50CSV())
+        effects = effects.concat(loadc50TrackerSummary())
+        effects = effects.concat(loadc20TrackerSummary())
         if (state.options.compared_to) {
           effects = effects.concat(loadCoinHistory(state.options.compared_to))
         }
@@ -19,20 +19,20 @@ export function reduceInitialLoading (state, action) {
   return { state, effects }
 }
 
-export function loadTrackerSummary () {
+export function loadc50TrackerSummary () {
   const config = {}
   config.url = 'https://cdn.answrly.com/c50/all-coins/c50-tracker-summary.csv'
   config.method = 'get'
-  return requestAjax([loadTrackerSummaryRequestName], config)
+  return requestAjax([loadC50TrackerSummaryRequestName], config)
 }
 
-export function loadC50CSV () {
+export function loadc20TrackerSummary () {
   const config = {}
-  config.url = 'https://cdn.answrly.com/c50/all-coins/c50-index.csv'
+  config.url = 'https://cdn.answrly.com/c50/all-coins/c20-tracker-summary.csv'
   config.method = 'get'
-  return requestAjax([loadC50CSVRequestName], config)
+  return requestAjax([loadC20TrackerSummaryRequestName], config)
 }
 
 export const coinUpdateWs = 'coin-update-ws'
-export const loadTrackerSummaryRequestName = 'load-tracker-summary'
-export const loadC50CSVRequestName = 'load-c50-csv-request'
+export const loadC50TrackerSummaryRequestName = 'load-c50-tracker-summary'
+export const loadC20TrackerSummaryRequestName = 'load-c20-tracker-summary'
