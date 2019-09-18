@@ -46,7 +46,6 @@ export function reduceCoins (state, action) {
         const key = IndexData[state.options.current_index].summaryKey
         state = { ...state }
         state[key] = { ...state[key] }
-        console.log('Count', key, Object.keys(state[key]).length)
         for (const slug in state[key]) {
           if (prices[slug] === state[key][slug].previousPrice) continue
           state[key][slug] = { ...state[key][slug] }
@@ -65,8 +64,6 @@ export function reduceCoins (state, action) {
       state = { ...state }
       state.options = { ...state.options }
       state.options.current_index = action.name
-      console.log('state', state)
-      console.log('c50', Object.keys(state.c50CoinSummaries).length)
       break
 
     case 'complete-request':
@@ -106,7 +103,6 @@ export function reduceCoins (state, action) {
           state.c50CoinSummaries = parseTrackerSummary(action.response)
 
           const slugs = Object.keys(state.c50CoinSummaries).join(',')
-          console.log('c50', Object.keys(state.c50CoinSummaries).length)
 
           effects = effects.concat(loadCoinCapAssets(slugs, 'c50'))
         }
@@ -115,7 +111,6 @@ export function reduceCoins (state, action) {
         if (action.response) {
           state = { ...state }
           state.c20CoinSummaries = parseTrackerSummary(action.response)
-          console.log('c20', state.c20CoinSummaries)
 
           const slugs = Object.keys(state.c20CoinSummaries).join(',')
           effects = effects.concat(loadCoinCapAssets(slugs, 'c20'))
