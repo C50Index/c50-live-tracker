@@ -39,7 +39,8 @@ function renderChart (state) {
 
   const c50IndexData = [] // The c50IndexData for the chart
 
-  for (let i = 0; i < state[dataKey].length; i++) {
+  // Let's not show the last 2 days because the data might not be loaded yet
+  for (let i = 0; i < state[dataKey].length - 2; i++) {
     const summary = state[dataKey][i]
     const timeUnix = dateToUnix(new Date(summary.Date))
     const price =
