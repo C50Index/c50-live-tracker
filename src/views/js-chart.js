@@ -12,18 +12,18 @@ function renderChart (state) {
   if (!state[chartDataKey].map) return
 
   // memoize the state, don't re-render if nothing has changed :)
-  // if (
-  //   !!prevState &&
-  //   state[chartDataKey] === prevState[chartDataKey] &&
-  //   state.options.compared_to === prevState.options.compared_to &&
-  //   !!state.coinData &&
-  //   !!prevState.coinData &&
-  //   prevState.coinData[state.options.compared_to] ===
-  //     state.coinData[state.options.compared_to] &&
-  //   state.options.current_index === prevState.options.current_index
-  // ) {
-  //   return
-  // }
+  if (
+    !!prevState &&
+    state[chartDataKey] === prevState[chartDataKey] &&
+    state.options.compared_to === prevState.options.compared_to &&
+    !!state.coinData &&
+    !!prevState.coinData &&
+    prevState.coinData[state.options.compared_to] ===
+      state.coinData[state.options.compared_to] &&
+    state.options.current_index === prevState.options.current_index
+  ) {
+    return
+  }
 
   prevState = state
 
@@ -37,7 +37,7 @@ function renderChart (state) {
    * probably be fixed at some point, but for now, we'll just throw it out.
    *  */
 
-  const c50IndexData = [] // The c50IndexData for the chart
+  const indexData = [] // The indexData for the chart
 
   // Let's not show the last 2 days because the data might not be loaded yet
   for (let i = 0; i < state[chartDataKey].length - 2; i++) {
@@ -48,28 +48,29 @@ function renderChart (state) {
         beginningPrice) /
       beginningPrice
 
-    c50IndexData.push({
+    indexData.push({
       x: timeUnix,
       y: price
     })
   }
-  series.push(c50IndexData)
+  series.push(indexData)
 
   // render the compared data if it exists
   if (
     !!state.options.compared_to &&
     state.coinData &&
     state.coinData[state.options.compared_to] &&
-    c50IndexData.length > 0
+    indexData.length > 0
   ) {
     const comparedData = []
     const comparedHistory = state.coinData[state.options.compared_to]
+    const sortedHistory = comparedHistory.sort(
+      (a, b) => Number(a.time_unix) - Number(b.time_unix)
+    )
     let comparedBeginningPrice = null
 
-    for (const comparedCoin of comparedHistory.sort(
-      (a, b) => Number(a.time_unix) - Number(b.time_unix)
-    )) {
-      if (Number(comparedCoin.time_unix) >= c50IndexData[0].x) {
+    for (const comparedCoin of sortedHistory) {
+      if (Number(comparedCoin.time_unix) >= indexData[0].x) {
         if (!comparedBeginningPrice) {
           comparedBeginningPrice = Number(comparedCoin.close)
         }
