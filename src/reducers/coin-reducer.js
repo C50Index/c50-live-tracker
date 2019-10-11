@@ -115,6 +115,30 @@ export function reduceCoins (state, action) {
           const slugs = Object.keys(state.c20CoinSummaries).join(',')
           effects = effects.concat(loadCoinCapAssets(slugs, 'c20'))
         }
+      } else if (
+        action.name[0] === RequestName.loadAggregateDollarTrackerSummary
+      ) {
+        if (action.response) {
+          state = { ...state }
+          /**
+           * For some weird reason, coin market cap calls the Paxos Standard Token
+           * Coin Cap: 'paxos-standard-token'
+           * Coin Market Cap: 'paxos-standard'
+           * Pretty confusing so we'll have an override on the slug name here
+           **/
+
+          state.aggregateDollarSummaries = parseTrackerSummary(action.response)
+          const summary = { ...state.aggregateDollarSummaries }
+          summary['paxos-standard'] = { ...summary['paxos-standard'] }
+          summary['paxos-standard'].slug = 'paxos-standard-token'
+          summary['paxos-standard'].symbol = 'paxos-standard-token'
+          summary['paxos-standard-token'] = summary['paxos-standard']
+          delete summary['paxos-standard']
+          state.aggregateDollarSummaries = summary
+
+          const slugs = Object.keys(state.aggregateDollarSummaries).join(',')
+          effects = effects.concat(loadCoinCapAssets(slugs, 'aggregateDollar'))
+        }
       }
   }
   return {

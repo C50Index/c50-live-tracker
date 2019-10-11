@@ -16,24 +16,31 @@ export function reduceChart (state, action) {
             headers: true
           })
         }
-      } else if (action.name[0] === RequestName.loadC50Data) {
+      } else if (action.name[0] === RequestName.loadC50ChartData) {
         if (action.success) {
           state = { ...state }
-          state.c50Data = { ...state.c50Data }
-          state.c50Data = parseCSV(action.response, {
+          state.c50ChartData = { ...state.c50ChartData }
+          state.c50ChartData = parseCSV(action.response, {
             headers: true
           })
         }
-      } else if (action.name[0] === RequestName.loadC20Data) {
+      } else if (action.name[0] === RequestName.loadC20ChartData) {
         if (action.success) {
           state = { ...state }
-          state.c20Data = { ...state.c20Data }
-          state.c20Data = parseCSV(action.response, {
+          state.c20ChartData = { ...state.c20ChartData }
+          state.c20ChartData = parseCSV(action.response, {
+            headers: true
+          })
+        }
+      } else if (action.name[0] === RequestName.loadAggregateDollarChartData) {
+        if (action.success) {
+          state = { ...state }
+          state.aggregateDollarChartData = { ...state.aggregateDollarChartData }
+          state.aggregateDollarChartData = parseCSV(action.response, {
             headers: true
           })
         }
       }
-
       break
 
     case 'update-compared-to':
@@ -69,16 +76,24 @@ export function loadCoinHistory (slug) {
   return requestAjax([RequestName.loadCoinHistory, slug], config)
 }
 
-export function loadC20Data () {
+export function loadC20ChartData () {
   const config = {}
   config.url = 'https://cdn.answrly.com/c50/all-coins/c20-index.csv'
   config.method = 'get'
-  return requestAjax([RequestName.loadC20Data], config)
+  return requestAjax([RequestName.loadC20ChartData], config)
 }
 
-export function loadC50Data () {
+export function loadC50ChartData () {
   const config = {}
   config.url = 'https://cdn.answrly.com/c50/all-coins/c50-index.csv'
   config.method = 'get'
-  return requestAjax([RequestName.loadC50Data], config)
+  return requestAjax([RequestName.loadC50ChartData], config)
+}
+
+export function loadAggregateDollarChartData () {
+  const config = {}
+  config.url =
+    'https://cdn.answrly.com/c50/all-coins/aggregate-dollar-index.csv'
+  config.method = 'get'
+  return requestAjax([RequestName.loadAggregateDollarChartData], config)
 }

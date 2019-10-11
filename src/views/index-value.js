@@ -3,14 +3,15 @@ const m = window.preact.h
 
 export function IndexValue (dispatch) {
   return state => {
-    let totalMarketcap = 0
+    let numerator = 0
+    const numeratorKey = IndexData[state.options.current_index].numeratorKey
     const key = IndexData[state.options.current_index].summaryKey
     for (const slug in state[key]) {
       const summary = state[key][slug]
-      if (!state[key][slug].marketcap) {
-        break
+      if (!state[key][slug][numeratorKey]) {
+        continue // skip the ones that aren't included
       }
-      totalMarketcap += summary.marketcap
+      numerator += Number(summary[numeratorKey])
     }
 
     return m(
@@ -25,10 +26,7 @@ export function IndexValue (dispatch) {
       m(
         'span',
         { style: 'color: #111111; font-weight: 700;' },
-        (
-          totalMarketcap /
-          IndexData[state.options.current_index].marketWeightedDivisor
-        ).toFixed(2)
+        (numerator / IndexData[state.options.current_index].divisor).toFixed(2)
       )
     )
   }

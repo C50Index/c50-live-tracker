@@ -6,29 +6,29 @@ const m = window.preact.h
 let prevState = null
 
 function renderChart (state) {
-  const dataKey = IndexData[state.options.current_index].dataKey
+  const chartDataKey = IndexData[state.options.current_index].chartDataKey
 
-  if (!state[dataKey]) return
-  if (!state[dataKey].map) return
+  if (!state[chartDataKey]) return
+  if (!state[chartDataKey].map) return
 
   // memoize the state, don't re-render if nothing has changed :)
-  if (
-    !!prevState &&
-    state[dataKey] === prevState[dataKey] &&
-    state.options.compared_to === prevState.options.compared_to &&
-    !!state.coinData &&
-    !!prevState.coinData &&
-    prevState.coinData[state.options.compared_to] ===
-      state.coinData[state.options.compared_to] &&
-    state.options.current_index === prevState.options.current_index
-  ) {
-    return
-  }
+  // if (
+  //   !!prevState &&
+  //   state[chartDataKey] === prevState[chartDataKey] &&
+  //   state.options.compared_to === prevState.options.compared_to &&
+  //   !!state.coinData &&
+  //   !!prevState.coinData &&
+  //   prevState.coinData[state.options.compared_to] ===
+  //     state.coinData[state.options.compared_to] &&
+  //   state.options.current_index === prevState.options.current_index
+  // ) {
+  //   return
+  // }
 
   prevState = state
 
   const beginningPrice =
-    state[dataKey][0][IndexData[state.options.current_index].name]
+    state[chartDataKey][0][IndexData[state.options.current_index].name]
 
   const series = []
 
@@ -40,8 +40,8 @@ function renderChart (state) {
   const c50IndexData = [] // The c50IndexData for the chart
 
   // Let's not show the last 2 days because the data might not be loaded yet
-  for (let i = 0; i < state[dataKey].length - 2; i++) {
-    const summary = state[dataKey][i]
+  for (let i = 0; i < state[chartDataKey].length - 2; i++) {
+    const summary = state[chartDataKey][i]
     const timeUnix = dateToUnix(new Date(summary.Date))
     const price =
       (Number(summary[IndexData[state.options.current_index].name]) -
@@ -125,7 +125,7 @@ export function JSChart (dispatch) {
         m(
           'span',
           { style: 'color: #2875e3; font-weight: 700;' },
-          IndexData[state.options.current_index].name
+          IndexData[state.options.current_index].displayName
         )
       ),
       state.options.compared_to &&

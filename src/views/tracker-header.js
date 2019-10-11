@@ -37,7 +37,7 @@ export function TrackerHeader (dispatch) {
                 }`,
                 onclick: () => dispatcher.setCurrentIndex(currentIndex)
               },
-              currentIndex
+              IndexData[currentIndex].displayName
             )
           )
         })
