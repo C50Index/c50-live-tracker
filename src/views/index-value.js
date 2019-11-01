@@ -4,14 +4,23 @@ const m = window.preact.h
 export function IndexValue (dispatch) {
   return state => {
     let numerator = 0
-    const numeratorKey = IndexData[state.options.current_index].numeratorKey
-    const key = IndexData[state.options.current_index].summaryKey
+    const indexData = IndexData[state.options.current_index]
+    const numeratorKey = indexData.numeratorKey
+    const key = indexData.summaryKey
     for (const slug in state[key]) {
       const summary = state[key][slug]
       if (!state[key][slug][numeratorKey]) {
         continue // skip the ones that aren't included
       }
-      numerator += Number(summary[numeratorKey])
+      // calculate the risk parity index
+      if (indexData.slugToPercent) {
+        const percent = Number(indexData.slugToPercent[slug]) / 100.0
+        const marketCap = Number(summary[numeratorKey])
+        const riskWeightedMarkedCap = percent * marketCap
+        numerator += riskWeightedMarkedCap
+      } else {
+        numerator += Number(summary[numeratorKey])
+      }
     }
 
     return m(
@@ -26,7 +35,7 @@ export function IndexValue (dispatch) {
       m(
         'span',
         { style: 'color: #111111; font-weight: 700;' },
-        numerator / IndexData[state.options.current_index].divisor
+        numerator / indexData.divisor
       )
     )
   }

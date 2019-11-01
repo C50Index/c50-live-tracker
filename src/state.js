@@ -52,11 +52,33 @@ export const IndexData = {
   c20Rp: {
     divisorType: 'price_weighted', // market_weighted | price_weighted
     summaryKey: 'c20RPSummaries',
-    numeratorKey: 'price',
+    numeratorKey: 'marketcap',
     divisor: 14064715.568343,
     chartDataKey: 'c20RpChartData',
     name: 'C20RiskParity', // The csv header name from the rails server for the chart data
-    displayName: 'C20 Risk Parity'
+    displayName: 'C20 Risk Parity',
+    slugToPercent: {
+      cardano: 4.48,
+      'bitcoin-cash': 3.79,
+      'binance-coin': 6.07,
+      'bitcoin-sv': 4.15,
+      bitcoin: 6.42,
+      dash: 5.07,
+      eos: 4.35,
+      'ethereum-classic': 5.16,
+      ethereum: 4.74,
+      chainlink: 5.05,
+      litecoin: 4.65,
+      iota: 4.94,
+      maker: 5.58,
+      neo: 4.34,
+      tron: 4.87,
+      nem: 5.19,
+      stellar: 5.14,
+      monero: 4.97,
+      ripple: 5.78,
+      tezos: 5.2
+    }
   }
 }
 
