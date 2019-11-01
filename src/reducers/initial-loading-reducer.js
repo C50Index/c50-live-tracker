@@ -3,7 +3,8 @@ import {
   loadCoinHistory,
   loadAggregateDollarChartData,
   loadC50ChartData,
-  loadC20ChartData
+  loadC20ChartData,
+  loadC20RPChartData
 } from './chart-reducer.js'
 import { RequestName } from '../state.js'
 
@@ -20,6 +21,8 @@ export function reduceInitialLoading (state, action) {
         effects = effects.concat(loadC20ChartData())
         effects = effects.concat(loadC50ChartData())
         effects = effects.concat(loadAggregateDollarChartData())
+        effects = effects.concat(loadC20RPTrackerSummary())
+        effects = effects.concat(loadC20RPChartData())
         if (state.options.compared_to) {
           effects = effects.concat(loadCoinHistory(state.options.compared_to))
         }
@@ -50,4 +53,13 @@ export function loadAggregateDollarTrackerSummary () {
 
   config.method = 'get'
   return requestAjax([RequestName.loadAggregateDollarTrackerSummary], config)
+}
+
+export function loadC20RPTrackerSummary () {
+  const config = {}
+  config.url =
+    'https://cdn.answrly.com/c50/all-coins/c20-risk-parity-tracker-summary.csv'
+
+  config.method = 'get'
+  return requestAjax([RequestName.loadC20RPTrackerSummary], config)
 }

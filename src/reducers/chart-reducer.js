@@ -40,6 +40,14 @@ export function reduceChart (state, action) {
             headers: true
           })
         }
+      } else if (action.name[0] === RequestName.loadC20RPChartData) {
+        if (action.success) {
+          state = { ...state }
+          state.c20RpChartData = { ...state.c20RpChartData }
+          state.c20RpChartData = parseCSV(action.response, {
+            headers: true
+          })
+        }
       }
       break
 
@@ -96,4 +104,11 @@ export function loadAggregateDollarChartData () {
     'https://cdn.answrly.com/c50/all-coins/aggregate-dollar-index.csv'
   config.method = 'get'
   return requestAjax([RequestName.loadAggregateDollarChartData], config)
+}
+
+export function loadC20RPChartData () {
+  const config = {}
+  config.url = 'https://cdn.answrly.com/c50/all-coins/c20-risk-parity.csv'
+  config.method = 'get'
+  return requestAjax([RequestName.loadC20RPChartData], config)
 }

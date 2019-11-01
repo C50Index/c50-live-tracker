@@ -26,7 +26,7 @@ export function IndexValue (dispatch) {
       m(
         'span',
         { style: 'color: #111111; font-weight: 700;' },
-        (numerator / IndexData[state.options.current_index].divisor)
+        numerator / IndexData[state.options.current_index].divisor
       )
     )
   }

@@ -139,6 +139,12 @@ export function reduceCoins (state, action) {
           const slugs = Object.keys(state.aggregateDollarSummaries).join(',')
           effects = effects.concat(loadCoinCapAssets(slugs, 'aggregateDollar'))
         }
+      } else if (action.name[0] === RequestName.loadC20RPTrackerSummary) {
+        state = { ...state }
+        state.c20RPSummaries = parseTrackerSummary(action.response)
+
+        const slugs = Object.keys(state.c20RPSummaries).join(',')
+        effects = effects.concat(loadCoinCapAssets(slugs, 'c20Rp'))
       }
   }
   return {

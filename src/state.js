@@ -3,9 +3,11 @@ export const initialState = {
   c50CoinSummaries: {}, // close: "0.09682", marketcap: "2510251344.0" name: "Cardano", slug: "cardano", symbol: "cardano"
   c20CoinSummaries: {}, // close: "0.09682", marketcap: "2510251344.0" name: "Cardano", slug: "cardano", symbol: "cardano"
   aggregateDollarSummaries: {},
+  c20RPSummaries: {},
   c50ChartData: {}, // The data to show on the graph
   c20ChartData: {}, // The data to show on the graph
   aggregateDollarChartData: {}, // Data to show on the chart
+  c20RpChartData: {}, // Data to show on the chart
   coinData: {}, // loaded from https://cdn.answrly.com/c50/all-coins/{slug}.csv
   options: {
     show_graph: true, // Show Coin graph
@@ -35,7 +37,7 @@ export const IndexData = {
     numeratorKey: 'marketcap',
     divisor: 24359904.42,
     chartDataKey: 'c20ChartData',
-    name: 'C20Index', // The csv header name from the rails server
+    name: 'C20Index', // The csv header name from the rails server for the chart data
     displayName: 'C20 Index'
   },
   aggregateDollar: {
@@ -46,6 +48,15 @@ export const IndexData = {
     chartDataKey: 'aggregateDollarChartData',
     name: 'AggregateDollarIndex', // The csv header name from the rails server
     displayName: 'Aggregate Dollar Index'
+  },
+  c20Rp: {
+    divisorType: 'price_weighted', // market_weighted | price_weighted
+    summaryKey: 'c20RPSummaries',
+    numeratorKey: 'price',
+    divisor: 14064715.568343,
+    chartDataKey: 'c20RpChartData',
+    name: 'C20RiskParity', // The csv header name from the rails server for the chart data
+    displayName: 'C20 Risk Parity'
   }
 }
 
@@ -55,8 +66,10 @@ export const RequestName = {
   loadC50ChartData: 'load-c50-data',
   loadC20ChartData: 'load-c20-data',
   loadAggregateDollarChartData: 'load-aggregate-dollar-data',
+  loadC20RpChartData: 'load-c20-rp-chart-data',
   loadC50TrackerSummary: 'load-c50-tracker-summary',
   loadC20TrackerSummary: 'load-c20-tracker-summary',
   wsCoinUpdate: 'coin-update-ws',
-  loadAggregateDollarTrackerSummary: 'load-aggregate-dollar-tracker-summary'
+  loadAggregateDollarTrackerSummary: 'load-aggregate-dollar-tracker-summary',
+  loadC20RPTrackerSummary: 'load-c20-rp-tracker-summary'
 }
