@@ -60,11 +60,11 @@ window.MarkactRoot = function (id, options = {}) {
       self.render()
     }
     const renderTime = Date.now() - startRenderTime
-    // console.log('rendered in', renderTime, 'ms')
-    // console.log('co/mpleted in', Date.now() - startTimings, 'ms')
-    // if (renderTime > 50) {
-    //   console.warn('Slow action:  ', renderTime + 'ms', action)
-    // }
+    console.log('rendered in', renderTime, 'ms')
+    console.log('completed in', Date.now() - startTimings, 'ms')
+    if (renderTime > 50) {
+      console.warn('Slow action:  ', renderTime + 'ms', action)
+    }
   }
   self.render = function () {
     const RootPageContent = RootPage(self.dispatch)

@@ -3,6 +3,7 @@
 // The prices index=0 equals today
 export function rowsToPrices(rows, opts={dateKey:'time_unix', priceKey: 'close'}) {
   return rows
+    .slice()
     .sort((a, b) => Number(a[opts.dateKey]) - Number(b[opts.dateKey]))
     .reverse()
     .map(r => Number(r[opts.priceKey]))
@@ -58,6 +59,9 @@ export function allTechnicalIndicators(rows, opts={dateKey:'time_unix', priceKey
   result.push(simpleMovingAverage(prices, 200));
   result.push(simpleMovingAverage(prices, 100));
   result.push(simpleMovingAverage(prices, 50));
+  result.push(exponentialMovingAverage(prices, 12));
+  result.push(exponentialMovingAverage(prices, 24));
+  result.push(exponentialMovingAverage(prices, 90));
   result.push(macd(prices));
 
   return result;

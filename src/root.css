@@ -30,6 +30,38 @@
   cursor: pointer;
 }
 
+.f7 {
+  font-weight: 700;
+}
+
+.flex {
+  display: flex;
+}
+
+.justify-start {
+  justify-content: flex-start;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-around {
+  justify-content: space-around;
+}
+
+.ml1 {
+  margin-left: 1rem;
+}
+
 .pa1 {
   padding: 1rem;
 }

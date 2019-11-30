@@ -23,16 +23,16 @@ export function RootPage (dispatch) {
       state.options.show_c50_index && IndexValueContent(state),
       state.options.show_technical_indicators && TechnicalIndicatorsContent(state),
       state.options.show_graph &&
-        m(
-          'div',
-          { class: `${state.options.full_screen ? '' : 'container'}` },
-          ChartPage(state)
-        ),
       m(
         'div',
         { class: `${state.options.full_screen ? '' : 'container'}` },
-        state.options.show_coin_table && CoinTableContent(state)
-      )
-    )
+        ChartPage(state)
+        ),
+        m(
+          'div',
+          { class: `${state.options.full_screen ? '' : 'container'}` },
+          state.options.show_coin_table && CoinTableContent(state)
+          ),
+          )
   }
 }

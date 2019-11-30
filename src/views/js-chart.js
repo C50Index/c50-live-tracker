@@ -12,19 +12,7 @@ function renderChart (state) {
   if (!state[chartDataKey].map) return
 
   // memoize the state, don't re-render if nothing has changed :)
-  if (
-    !!prevState &&
-    state[chartDataKey] === prevState[chartDataKey] &&
-    state.options.compared_to === prevState.options.compared_to &&
-    !!state.coinData &&
-    !!prevState.coinData &&
-    prevState.coinData[state.options.compared_to] ===
-      state.coinData[state.options.compared_to] &&
-    state.options.current_index === prevState.options.current_index
-  ) {
-    return
-  }
-
+  if(isSame(prevState, state)) return;
   prevState = state
 
   const beginningPrice =
@@ -150,4 +138,17 @@ export function JSChart (dispatch) {
       m('div', { id: 'theChart', class: 'pa1' })
     )
   }
+}
+
+function isSame(prevState, state) {
+  const chartDataKey = IndexData[state.options.current_index].chartDataKey
+  return (!!prevState &&
+    state[chartDataKey] === prevState[chartDataKey] &&
+    state.options.compared_to === prevState.options.compared_to &&
+    !!state.coinData &&
+    !!prevState.coinData &&
+    prevState.coinData[state.options.compared_to] ===
+      state.coinData[state.options.compared_to] &&
+    state.options.current_index === prevState.options.current_index
+  )
 }
