@@ -156,7 +156,7 @@
 
   <div>
     <iframe width="100%" frameBorder="0" height='580px' id='technicalIndicatorsChartIframe'
-      src='https://live-tracker.c50index.com/?full_screen=true&show_graph=false&show_coin_table=false&full_screen=true&show_header=false&show_c50_index=false&show_technical_indicators=true&compared_to=bitcoin'></iframe>
+      src='https://live-tracker.c50index.com/?current_index=c50&compared_to=bitcoin&show_technical_indicators=true&full_screen=true&show_graph=false&show_coin_table=false&full_screen=true&show_header=false&show_c50_index=false'></iframe>
 
     <div>
       <div>Embed Code</div>
@@ -164,7 +164,7 @@
       <textarea readonly="readonly" id='technicalIndicatorsChartTextarea' class='form-control'
         style='margin-bottom: 2rem;'>
           <iframe height="250px" width="100%" frameBorder="0"
-            src='https://live-tracker.c50index.com/?full_screen=true&show_graph=false&show_coin_table=false&full_screen=true&show_header=false&show_c50_index=false&show_technical_indicators=true&compared_to=bitcoin'></iframe>
+            src='https://live-tracker.c50index.com/?current_index=c50&compared_to=bitcoin&show_technical_indicators=true&full_screen=true&show_graph=false&show_coin_table=false&full_screen=true&show_header=false&show_c50_index=false'></iframe>
                 </textarea>
     </div>
   </div>
@@ -177,8 +177,8 @@
       return options.map((option) => `<option value=${option} ${option === selectedValue ? 'selected' : ''}>${option}</option>`).join("");
     }
 
-    let technicalIndicatorsIndex = '';
-    let technicalIndicatorsComparedToCoin = '';
+    let technicalIndicatorsIndex = 'c50';
+    let technicalIndicatorsComparedToCoin = 'bitcoin';
     function updateTechnicalIndicatorsChart(e, name) {
       if (name === 'index') {
         technicalIndicatorsIndex = (e && e.currentTarget.value);
@@ -194,12 +194,11 @@
       const indexOptions = createOptionsString(indexes, technicalIndicatorsIndex)
       const comparedOptions = createOptionsString(slugs, technicalIndicatorsComparedToCoin)
       technicalIndicatorsChartHeader.innerHTML = `Show Technical Indicators of <select onchange='updateTechnicalIndicatorsChart(event, "index")' class='form-control'>${indexOptions}</select> Compared to <select onchange='updateTechnicalIndicatorsChart(event, "coin")' class='form-control'>${comparedOptions}</select>`
-      technicalIndicatorsChartIframe.src = `https://live-tracker.c50index.com/?show_technical_indicators=true&full_screen=true&show_graph=false&show_coin_table=false&full_screen=true&show_header=false&show_c50_index=false&compared_to=${technicalIndicatorsComparedToCoin}&current_index=${technicalIndicatorsIndex}`
+      technicalIndicatorsChartIframe.src = `https://live-tracker.c50index.com/?current_index=${(technicalIndicatorsIndex || '%27%27')}&compared_to=${(technicalIndicatorsComparedToCoin || '%27%27')}&show_technical_indicators=true&full_screen=true&show_graph=false&show_coin_table=false&full_screen=true&show_header=false&show_c50_index=false`
       technicalIndicatorsChartTextarea.innerText = technicalIndicatorsChartIframe.outerHTML;
     }
 
     function updateC50ComparedTo(e) {
-
       let comparedToCoin = (e && e.target.value) || 'bitcoin';
 
       const comparedC50Header = document.getElementById('comparedC50Header');
