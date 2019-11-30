@@ -152,10 +152,10 @@
     </div>
   </div>
 
-  <h2>Show Technical Indicators</h2>
+  <h2 id='technicalIndicatorsChartHeader'>Show Technical Indicators</h2>
 
   <div>
-    <iframe height="250px" width="100%" frameBorder="0"
+    <iframe width="100%" frameBorder="0" height='580px' id='technicalIndicatorsChart'
       src='https://live-tracker.c50index.com/?full_screen=true&show_graph=false&show_coin_table=false&full_screen=true&show_header=false&show_c50_index=false&show_technical_indicators=true&compared_to=bitcoin'></iframe>
 
     <!-- <div>
@@ -169,6 +169,28 @@
   </div>
 
   <script>
+    function createOptionsString(options, selectedValue) {
+      return options.map((option) => `<option value=${option} ${option === selectedValue ? 'selected' : ''}>${option}</option>`).join("");
+    }
+
+    function updateTechnicalIndicatorsChart(e, name) {
+      console.log("name", name)
+      const indexes = ['c20', 'c50', 'aggregateDollar', 'c20Rp'];
+      const slugs = ["cardano", "aeternity", "basic-attention-token", "bitcoin-diamond", "bitcoin-cash", "bytecoin-bcn", "binance-coin", "bitcoin", "bitcoin-gold", "bytom", "bitshares", "cryptonex", "dash", "dogecoin", "eos", "ethereum-classic", "ethereum", "golem-network-tokens", "holo", "huobi-token", "icon", "iostoken", "chainlink", "lisk", "litecoin", "iota", "nano", "neo", "pundi-x", "omisego", "ontology", "project-pai", "populous", "qtum", "augur", "siacoin", "status", "steem", "stratis", "tron", "wanchain", "waves", "waltonchain", "nem", "stellar", "monero", "ripple", "verge", "zcash", "zilliqa"];
+      let index = (e && e.currentTarget.value) || 'c50'
+      let comparedToCoin = (e && e.currentTarget.value) || 'bitcoin';
+
+      const technicalIndicatorsChartHeader = document.getElementById('technicalIndicatorsChartHeader');
+      const technicalIndicatorsChartIframe = document.getElementById('technicalIndicatorsChartIframe');
+      const technicalIndicatorsChartTextarea = document.getElementById('technicalIndicatorsChartTextarea');
+
+      // const indexOptionsString = indexes.map((index) => <opto)
+      const indexOptions = createOptionsString(indexes, index)
+      const comparedOptions = createOptionsString(slugs, comparedToCoin)
+      technicalIndicatorsChartHeader.innerHTML = `Show Technical Indicators of <select onchange='updateTechnicalIndicatorsChart(event, 'index')' class='form-control'>${indexOptions}</select> Compared to <select onchange='updateTechnicalIndicatorsChart(event, 'coin')' class='form-control'>${comparedOptions}</select>`
+      technicalIndicatorsChartIframe.src = `https://live-tracker.c50index.com/?full_screen=true&show_graph=true&show_coin_table=false&full_screen=true&show_header=false&show_c50_index=false&compared_to=${comparedToCoin}&current_index=c50`
+    }
+
     function updateC50ComparedTo(e) {
       const slugs = ["cardano", "aeternity", "basic-attention-token", "bitcoin-diamond", "bitcoin-cash", "bytecoin-bcn", "binance-coin", "bitcoin", "bitcoin-gold", "bytom", "bitshares", "cryptonex", "dash", "dogecoin", "eos", "ethereum-classic", "ethereum", "golem-network-tokens", "holo", "huobi-token", "icon", "iostoken", "chainlink", "lisk", "litecoin", "iota", "nano", "neo", "pundi-x", "omisego", "ontology", "project-pai", "populous", "qtum", "augur", "siacoin", "status", "steem", "stratis", "tron", "wanchain", "waves", "waltonchain", "nem", "stellar", "monero", "ripple", "verge", "zcash", "zilliqa"];
 
@@ -178,7 +200,8 @@
       const comparedC50Iframe = document.getElementById('comparedC50Iframe');
       const comparedToC50Textarea = document.getElementById('comparedToC50Textarea');
 
-      const optionsString = slugs.map((slug) => `<option value=${slug} ${slug === comparedToCoin ? 'selected' : ''}>${slug}</option>`).join("");
+      // const optionsString = slugs.map((slug) => `<option value=${slug} ${slug === comparedToCoin ? 'selected' : ''}>${slug}</option>`).join("");
+      const optionsString = createOptionsString(slugs, comparedToCoin);
       comparedC50Header.innerHTML = `Show Graph of C50 Index Compared to <select onchange='updateC50ComparedTo(event)' class='form-control'>${optionsString}</select>`
       comparedC50Iframe.src = `https://live-tracker.c50index.com/?full_screen=true&show_graph=true&show_coin_table=false&full_screen=true&show_header=false&show_c50_index=false&compared_to=${comparedToCoin}&current_index=c50`
       comparedToC50Textarea.innerText = comparedC50Iframe.outerHTML;
@@ -193,7 +216,7 @@
       const comparedC20Iframe = document.getElementById('comparedC20Iframe');
       const comparedToC20Textarea = document.getElementById('comparedToC20Textarea');
 
-      const optionsString = slugs.map((slug) => `<option value=${slug} ${slug === comparedToCoin ? 'selected' : ''}>${slug}</option>`).join("");
+      const optionsString = createOptionsString(slugs, comparedToCoin)
       comparedC20Header.innerHTML = `Show Graph of C20 Index Compared to <select onchange='updateC20ComparedTo(event)' class='form-control'>${optionsString}</select>`
       comparedC20Iframe.src = `https://live-tracker.c50index.com/?full_screen=true&show_graph=true&show_coin_table=false&full_screen=true&show_header=false&show_c50_index=false&compared_to=${comparedToCoin}&current_index=c20`
       comparedToC20Textarea.innerText = comparedC20Iframe.outerHTML;
@@ -203,6 +226,7 @@
     window.onload = () => {
       updateC50ComparedTo();
       updateC20ComparedTo();
+      updateTechnicalIndicatorsChart();
     }
 
   </script>
