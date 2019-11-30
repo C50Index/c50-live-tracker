@@ -3,6 +3,7 @@
 // The prices index=0 equals today
 export function rowsToPrices(rows, opts={dateKey:'time_unix', priceKey: 'close'}) {
   if(!rows) return [];
+  if(!Array.isArray(rows)) return[];
   return rows
     .slice()
     .sort((a, b) => Number(a[opts.dateKey]) - Number(b[opts.dateKey]))
