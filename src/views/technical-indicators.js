@@ -5,21 +5,23 @@ const m = window.preact.h
 
 export function TechnicalIndicators(dispatch) {
   return (state) => {
-    const indexData = IndexData[state.options.current_index]
-    const chartDataKey = indexData.chartDataKey;
-    const data = state[chartDataKey];
-    if(!data || Object.keys(data).length === 0) return m('div', {}, '');
+    if(!(!!state.options.current_index && !!state.options.compared_to)) return;
 
-    const indexIndicators = allTechnicalIndicators(data, {dateKey: 'Date', priceKey: indexData.name})
+    let indexIndicators = null;
+    const indexData = IndexData[state.options.current_index]
+    
+    if(indexData && indexData.chartDataKey && state[indexData.chartDataKey ]) {
+      indexIndicators = allTechnicalIndicators(state[indexData.chartDataKey ], {dateKey: 'Date', priceKey: indexData.name})
+    }
+
     let comparedToIndicators = null;
-    let comparedToData = state.coinData[state.options.compared_to];
+    const comparedToData = state.coinData[state.options.compared_to];
     if(comparedToData) {
       comparedToIndicators = allTechnicalIndicators(comparedToData);
     }
     
     return m('div', {class: 'flex'},
-
-      displayIndicators(indexData.displayName, indexIndicators),
+      indexIndicators && displayIndicators(indexData.displayName, indexIndicators),
       comparedToIndicators && displayIndicators(slugToHuman(state.options.compared_to), comparedToIndicators)
     )
   }

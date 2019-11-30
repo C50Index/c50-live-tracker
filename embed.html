@@ -155,44 +155,50 @@
   <h2 id='technicalIndicatorsChartHeader'>Show Technical Indicators</h2>
 
   <div>
-    <iframe width="100%" frameBorder="0" height='580px' id='technicalIndicatorsChart'
+    <iframe width="100%" frameBorder="0" height='580px' id='technicalIndicatorsChartIframe'
       src='https://live-tracker.c50index.com/?full_screen=true&show_graph=false&show_coin_table=false&full_screen=true&show_header=false&show_c50_index=false&show_technical_indicators=true&compared_to=bitcoin'></iframe>
 
-    <!-- <div>
+    <div>
       <div>Embed Code</div>
 
-      <textarea readonly="readonly" id='comparedToC20Textarea' class='form-control' style='margin-bottom: 2rem;'>
+      <textarea readonly="readonly" id='technicalIndicatorsChartTextarea' class='form-control'
+        style='margin-bottom: 2rem;'>
           <iframe height="250px" width="100%" frameBorder="0"
-            src='https://live-tracker.c50index.com/?full_screen=true&show_graph=true&show_coin_table=false&full_screen=true&show_header=false&show_c50_index=false&compared_to=bitcoin&current_index=c20'></iframe>
+            src='https://live-tracker.c50index.com/?full_screen=true&show_graph=false&show_coin_table=false&full_screen=true&show_header=false&show_c50_index=false&show_technical_indicators=true&compared_to=bitcoin'></iframe>
                 </textarea>
-    </div> -->
+    </div>
   </div>
 
   <script>
+    const slugs = ['', "cardano", "aeternity", "basic-attention-token", "bitcoin-diamond", "bitcoin-cash", "bytecoin-bcn", "binance-coin", "bitcoin", "bitcoin-gold", "bytom", "bitshares", "cryptonex", "dash", "dogecoin", "eos", "ethereum-classic", "ethereum", "golem-network-tokens", "holo", "huobi-token", "icon", "iostoken", "chainlink", "lisk", "litecoin", "iota", "nano", "neo", "pundi-x", "omisego", "ontology", "project-pai", "populous", "qtum", "augur", "siacoin", "status", "steem", "stratis", "tron", "wanchain", "waves", "waltonchain", "nem", "stellar", "monero", "ripple", "verge", "zcash", "zilliqa"];
+    const indexes = ['', 'c50', 'c20', 'c20Rp', 'aggregateDollar'];
+
     function createOptionsString(options, selectedValue) {
       return options.map((option) => `<option value=${option} ${option === selectedValue ? 'selected' : ''}>${option}</option>`).join("");
     }
 
     function updateTechnicalIndicatorsChart(e, name) {
       console.log("name", name)
-      const indexes = ['c20', 'c50', 'aggregateDollar', 'c20Rp'];
-      const slugs = ["cardano", "aeternity", "basic-attention-token", "bitcoin-diamond", "bitcoin-cash", "bytecoin-bcn", "binance-coin", "bitcoin", "bitcoin-gold", "bytom", "bitshares", "cryptonex", "dash", "dogecoin", "eos", "ethereum-classic", "ethereum", "golem-network-tokens", "holo", "huobi-token", "icon", "iostoken", "chainlink", "lisk", "litecoin", "iota", "nano", "neo", "pundi-x", "omisego", "ontology", "project-pai", "populous", "qtum", "augur", "siacoin", "status", "steem", "stratis", "tron", "wanchain", "waves", "waltonchain", "nem", "stellar", "monero", "ripple", "verge", "zcash", "zilliqa"];
-      let index = (e && e.currentTarget.value) || 'c50'
-      let comparedToCoin = (e && e.currentTarget.value) || 'bitcoin';
+      let index = '';
+      let comparedToCoin = '';
+      if (name === 'index') {
+        index = (e && e.currentTarget.value);
+      }
+      if (name === 'coin') {
+        comparedToCoin = (e && e.currentTarget.value);
+      }
 
       const technicalIndicatorsChartHeader = document.getElementById('technicalIndicatorsChartHeader');
       const technicalIndicatorsChartIframe = document.getElementById('technicalIndicatorsChartIframe');
       const technicalIndicatorsChartTextarea = document.getElementById('technicalIndicatorsChartTextarea');
 
-      // const indexOptionsString = indexes.map((index) => <opto)
       const indexOptions = createOptionsString(indexes, index)
       const comparedOptions = createOptionsString(slugs, comparedToCoin)
-      technicalIndicatorsChartHeader.innerHTML = `Show Technical Indicators of <select onchange='updateTechnicalIndicatorsChart(event, 'index')' class='form-control'>${indexOptions}</select> Compared to <select onchange='updateTechnicalIndicatorsChart(event, 'coin')' class='form-control'>${comparedOptions}</select>`
-      technicalIndicatorsChartIframe.src = `https://live-tracker.c50index.com/?full_screen=true&show_graph=true&show_coin_table=false&full_screen=true&show_header=false&show_c50_index=false&compared_to=${comparedToCoin}&current_index=c50`
+      technicalIndicatorsChartHeader.innerHTML = `Show Technical Indicators of <select onchange='updateTechnicalIndicatorsChart(event, "index")' class='form-control'>${indexOptions}</select> Compared to <select onchange='updateTechnicalIndicatorsChart(event, "coin")' class='form-control'>${comparedOptions}</select>`
+      technicalIndicatorsChartIframe.src = `https://live-tracker.c50index.com/?show_technical_indicators=true&full_screen=true&show_graph=false&show_coin_table=false&full_screen=true&show_header=false&show_c50_index=false&compared_to=${comparedToCoin}&current_index=${index}`
     }
 
     function updateC50ComparedTo(e) {
-      const slugs = ["cardano", "aeternity", "basic-attention-token", "bitcoin-diamond", "bitcoin-cash", "bytecoin-bcn", "binance-coin", "bitcoin", "bitcoin-gold", "bytom", "bitshares", "cryptonex", "dash", "dogecoin", "eos", "ethereum-classic", "ethereum", "golem-network-tokens", "holo", "huobi-token", "icon", "iostoken", "chainlink", "lisk", "litecoin", "iota", "nano", "neo", "pundi-x", "omisego", "ontology", "project-pai", "populous", "qtum", "augur", "siacoin", "status", "steem", "stratis", "tron", "wanchain", "waves", "waltonchain", "nem", "stellar", "monero", "ripple", "verge", "zcash", "zilliqa"];
 
       let comparedToCoin = (e && e.target.value) || 'bitcoin';
 
@@ -208,8 +214,6 @@
     }
 
     function updateC20ComparedTo(e) {
-      const slugs = ["cardano", "aeternity", "basic-attention-token", "bitcoin-diamond", "bitcoin-cash", "bytecoin-bcn", "binance-coin", "bitcoin", "bitcoin-gold", "bytom", "bitshares", "cryptonex", "dash", "dogecoin", "eos", "ethereum-classic", "ethereum", "golem-network-tokens", "holo", "huobi-token", "icon", "iostoken", "chainlink", "lisk", "litecoin", "iota", "nano", "neo", "pundi-x", "omisego", "ontology", "project-pai", "populous", "qtum", "augur", "siacoin", "status", "steem", "stratis", "tron", "wanchain", "waves", "waltonchain", "nem", "stellar", "monero", "ripple", "verge", "zcash", "zilliqa"];
-
       let comparedToCoin = (e && e.target.value) || 'bitcoin';
 
       const comparedC20Header = document.getElementById('comparedC20Header');
