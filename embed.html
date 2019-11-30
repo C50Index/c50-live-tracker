@@ -177,25 +177,24 @@
       return options.map((option) => `<option value=${option} ${option === selectedValue ? 'selected' : ''}>${option}</option>`).join("");
     }
 
+    let technicalIndicatorsIndex = 'c50';
+    let technicalIndicatorsComparedToCoin = 'bitcoin';
     function updateTechnicalIndicatorsChart(e, name) {
-      console.log("name", name)
-      let index = '';
-      let comparedToCoin = '';
       if (name === 'index') {
-        index = (e && e.currentTarget.value);
+        technicalIndicatorsIndex = (e && e.currentTarget.value);
       }
       if (name === 'coin') {
-        comparedToCoin = (e && e.currentTarget.value);
+        technicalIndicatorsComparedToCoin = (e && e.currentTarget.value);
       }
 
       const technicalIndicatorsChartHeader = document.getElementById('technicalIndicatorsChartHeader');
       const technicalIndicatorsChartIframe = document.getElementById('technicalIndicatorsChartIframe');
       const technicalIndicatorsChartTextarea = document.getElementById('technicalIndicatorsChartTextarea');
 
-      const indexOptions = createOptionsString(indexes, index)
-      const comparedOptions = createOptionsString(slugs, comparedToCoin)
+      const indexOptions = createOptionsString(indexes, technicalIndicatorsIndex)
+      const comparedOptions = createOptionsString(slugs, technicalIndicatorsComparedToCoin)
       technicalIndicatorsChartHeader.innerHTML = `Show Technical Indicators of <select onchange='updateTechnicalIndicatorsChart(event, "index")' class='form-control'>${indexOptions}</select> Compared to <select onchange='updateTechnicalIndicatorsChart(event, "coin")' class='form-control'>${comparedOptions}</select>`
-      technicalIndicatorsChartIframe.src = `https://live-tracker.c50index.com/?show_technical_indicators=true&full_screen=true&show_graph=false&show_coin_table=false&full_screen=true&show_header=false&show_c50_index=false&compared_to=${comparedToCoin}&current_index=${index}`
+      technicalIndicatorsChartIframe.src = `https://live-tracker.c50index.com/?show_technical_indicators=true&full_screen=true&show_graph=false&show_coin_table=false&full_screen=true&show_header=false&show_c50_index=false&compared_to=${technicalIndicatorsComparedToCoin}&current_index=${technicalIndicatorsIndex}`
     }
 
     function updateC50ComparedTo(e) {
