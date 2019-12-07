@@ -1,13 +1,17 @@
 // {name: "Two Hundred Day Moving Average", value: number, signal: "buy" | "sell" | "hold"}
 
 // The prices index=0 equals today
+// Sorted from most recent 0 index.  To earliest last index.
 export function rowsToPrices(rows, opts={dateKey:'time_unix', priceKey: 'close'}) {
   if(!rows) return [];
   if(!Array.isArray(rows)) return[];
-  return rows
-    .slice()
-    .sort((a, b) => Number(a[opts.dateKey]) - Number(b[opts.dateKey]))
-    .reverse()
+  const rowsCopy = rows.map(e => {return { ...e }}).slice();
+  return rowsCopy
+    .sort((a, b) => {
+      let aDate = opts.dateKey === 'time_unix' ? Number(a[opts.dateKey]) : Number(new Date(a[opts.dateKey]));
+      let bDate = opts.dateKey === 'time_unix' ? Number(b[opts.dateKey]) : Number(new Date(b[opts.dateKey]));
+      return bDate - aDate;
+    })
     .map(r => Number(r[opts.priceKey]))
     .filter(x => x);
 }
@@ -54,6 +58,14 @@ export function macd(prices) {
   return {name: `MACD`, value: macd, signal: signal}
 }
 
+function standardDeviation(prices, days) {
+  // if(!days) days = prices.length;
+  // let mean = 0;
+  // debugger
+
+  // const mean = prices.reduce((sum, curr) => sum + curr, 0) / prices.length;
+  // return Math.sqrt(prices.reduce((acc, curr) => acc + (curr - mean) ** 2, 0) / prices.length)
+}
 
 export function allTechnicalIndicators(rows, opts={dateKey:'time_unix', priceKey: 'close'}) {
   let result = [];
