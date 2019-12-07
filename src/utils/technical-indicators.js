@@ -85,6 +85,41 @@ function bollingerBands(prices, days=20) {
     signal: signal}
 }
 
+// RSI with 14 day simple moving average
+function rsi(prices, days=14) {
+  prices = prices.slice(0, days + 1).reverse();
+  const ups = [];
+  const downs = [];
+  let prevPrice = prices[0];
+  for(let i = 1; i < prices.length; i++) {
+    let currPrice = prices[i];
+    let diff = Math.abs(currPrice - prevPrice);
+    if(currPrice > prevPrice) {
+      ups.push(diff);
+    }
+    if(currPrice < prevPrice) {
+      downs.push(diff);
+    }
+    prevPrice = currPrice;
+  }
+  const RS = simpleMovingAverage(ups, ups.length)['value'] / simpleMovingAverage(downs, downs.length)['value'];
+  const RSI = 100 - (100 / (1 + RS));
+
+  let signal = 'hold';
+  if(RSI > 70) {
+    signal = 'sell';
+  } 
+  if (RSI < 30) {
+    signal = 'buy';
+  }
+
+  return {
+    name: 'RSI',
+    value: RSI,
+    signal
+  }
+}
+
 export function allTechnicalIndicators(rows, opts={dateKey:'time_unix', priceKey: 'close'}) {
   let result = [];
   let prices = rowsToPrices(rows, opts);
@@ -96,6 +131,7 @@ export function allTechnicalIndicators(rows, opts={dateKey:'time_unix', priceKey
   result.push(exponentialMovingAverage(prices, 90));
   result.push(macd(prices));
   result.push(bollingerBands(prices, 20));
+  result.push(rsi(prices));
 
   return result;
 }
