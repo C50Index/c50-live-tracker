@@ -58,13 +58,31 @@ export function macd(prices) {
   return {name: `MACD`, value: macd, signal: signal}
 }
 
-function standardDeviation(prices, days) {
-  // if(!days) days = prices.length;
-  // let mean = 0;
-  // debugger
+// The standard deviation
+function stdDev(prices, days) {
+  if(!days) days = prices.length;
+  prices = prices.slice(0, days);
+  const mean = prices.reduce((sum, curr) => sum + curr, 0) / prices.length;
+  return Math.sqrt(prices.reduce((acc, curr) => acc + (curr - mean) ** 2, 0) / prices.length)
+}
 
-  // const mean = prices.reduce((sum, curr) => sum + curr, 0) / prices.length;
-  // return Math.sqrt(prices.reduce((acc, curr) => acc + (curr - mean) ** 2, 0) / prices.length)
+function bollingerBands(prices, days=20) {
+  let movingAverage = simpleMovingAverage(prices, days);
+  let stdDeviation = stdDev(prices, days);
+  let upperBand = movingAverage['value'] + (stdDeviation * 2);
+  let lowerBand = movingAverage['value'] - (stdDeviation * 2);
+  let signal = 'hold';
+  let price = prices[0];
+  if(price > upperBand) {
+    signal = 'sell';
+  }
+  if(price < lowerBand) {
+    signal = 'buy';
+  }
+  return {
+    name: 'Bollinger Bands',
+    value: `upper=${upperBand}\nlower=${lowerBand}`,
+    signal: signal}
 }
 
 export function allTechnicalIndicators(rows, opts={dateKey:'time_unix', priceKey: 'close'}) {
@@ -77,6 +95,7 @@ export function allTechnicalIndicators(rows, opts={dateKey:'time_unix', priceKey
   result.push(exponentialMovingAverage(prices, 24));
   result.push(exponentialMovingAverage(prices, 90));
   result.push(macd(prices));
+  result.push(bollingerBands(prices, 20));
 
   return result;
 }

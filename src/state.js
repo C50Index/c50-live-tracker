@@ -18,7 +18,7 @@ export const initialState = {
     show_c50_index_image: false, // Show Image next to c50 index
     compared_to: '', // What we are comparing the c50index to
     current_index: 'c20',
-    show_technical_indicators: true
+    show_technical_indicators: false
   }
 }
 
