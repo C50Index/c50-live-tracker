@@ -49,7 +49,7 @@ export const IndexData = {
     divisorType: 'price_weighted', // market_weighted | price_weighted
     summaryKey: 'aggregateDollarSummaries',
     numeratorKey: 'price',
-    divisor: 4.0,
+    divisor: 3.0,
     chartDataKey: 'aggregateDollarChartData',
     name: 'AggregateDollarIndex', // The csv header name from the rails server
     displayName: 'Aggregate Dollar Index'
