@@ -36,7 +36,7 @@ export function TechnicalIndicators(dispatch) {
           (value) => dispatcher.updateSelection('compared_to', value)
         ),
       ), 
-      m('div', {class: 'flex'},
+      m('div', {class: 'flex w-100'},
         indexIndicators && displayIndicators(indexData.displayName, indexIndicators),
         comparedToIndicators && displayIndicators(slugToHuman(state.options.compared_to), comparedToIndicators)
       )

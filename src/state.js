@@ -18,11 +18,11 @@ export const initialState = {
     full_screen: true, // Make full screen
     show_header: true, // Show Summary header
     show_c50_index: true, // Show live c50 index number
-    show_c50_index_image: true, // Show Image next to c50 index
+    show_c50_index_image: false, // Show Image next to c50 index
     compared_to: '', // What we are comparing the c50index to
     current_index: 'c20',
-    show_technical_indicators: true,
-    show_selector: true,
+    show_technical_indicators: false,
+    show_selector: false,
   }
 }
 
