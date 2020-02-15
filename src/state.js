@@ -1,3 +1,4 @@
+
 export const initialState = {
   initialLoad: true,
   c50CoinSummaries: {}, // close: "0.09682", marketcap: "2510251344.0" name: "Cardano", slug: "cardano", symbol: "cardano"
@@ -9,16 +10,19 @@ export const initialState = {
   aggregateDollarChartData: {}, // Data to show on the chart
   c20RpChartData: {}, // Data to show on the chart
   coinData: {}, // loaded from https://cdn.answrly.com/c50/all-coins/{slug}.csv
+  all_slugs:  ["cardano", "aeternity", "basic-attention-token", "bitcoin-diamond", "bitcoin-cash", "bytecoin-bcn", "binance-coin", "bitcoin", "bitcoin-gold", "bytom", "bitshares", "cryptonex", "dash", "dogecoin", "eos", "ethereum-classic", "ethereum", "golem-network-tokens", "holo", "huobi-token", "icon", "iostoken", "chainlink", "lisk", "litecoin", "iota", "nano", "neo", "pundi-x", "omisego", "ontology", "project-pai", "populous", "qtum", "augur", "siacoin", "status", "steem", "stratis", "tron", "wanchain", "waves", "waltonchain", "nem", "stellar", "monero", "ripple", "verge", "zcash", "zilliqa"],
+  all_indexes: [ 'c50', 'c20', 'c20Rp', 'aggregateDollar'],
   options: {
     show_graph: true, // Show Coin graph
     show_coin_table: true, // Show coin summary table
     full_screen: true, // Make full screen
     show_header: true, // Show Summary header
     show_c50_index: true, // Show live c50 index number
-    show_c50_index_image: false, // Show Image next to c50 index
+    show_c50_index_image: true, // Show Image next to c50 index
     compared_to: '', // What we are comparing the c50index to
     current_index: 'c20',
-    show_technical_indicators: false
+    show_technical_indicators: true,
+    show_selector: true,
   }
 }
 

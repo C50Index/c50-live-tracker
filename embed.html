@@ -177,26 +177,6 @@
       return options.map((option) => `<option value=${option} ${option === selectedValue ? 'selected' : ''}>${option}</option>`).join("");
     }
 
-    let technicalIndicatorsIndex = 'c50';
-    let technicalIndicatorsComparedToCoin = 'bitcoin';
-    function updateTechnicalIndicatorsChart(e, name) {
-      if (name === 'index') {
-        technicalIndicatorsIndex = (e && e.currentTarget.value);
-      }
-      if (name === 'coin') {
-        technicalIndicatorsComparedToCoin = (e && e.currentTarget.value);
-      }
-
-      const technicalIndicatorsChartHeader = document.getElementById('technicalIndicatorsChartHeader');
-      const technicalIndicatorsChartIframe = document.getElementById('technicalIndicatorsChartIframe');
-      const technicalIndicatorsChartTextarea = document.getElementById('technicalIndicatorsChartTextarea');
-
-      const indexOptions = createOptionsString(indexes, technicalIndicatorsIndex)
-      const comparedOptions = createOptionsString(slugs, technicalIndicatorsComparedToCoin)
-      technicalIndicatorsChartHeader.innerHTML = `Show Technical Indicators of <select onchange='updateTechnicalIndicatorsChart(event, "index")' class='form-control'>${indexOptions}</select> Compared to <select onchange='updateTechnicalIndicatorsChart(event, "coin")' class='form-control'>${comparedOptions}</select>`
-      technicalIndicatorsChartIframe.src = `https://live-tracker.c50index.com/?current_index=${(technicalIndicatorsIndex || '%27%27')}&compared_to=${(technicalIndicatorsComparedToCoin || '%27%27')}&show_technical_indicators=true&full_screen=true&show_graph=false&show_coin_table=false&full_screen=true&show_header=false&show_c50_index=false`
-      technicalIndicatorsChartTextarea.innerText = technicalIndicatorsChartIframe.outerHTML;
-    }
 
     function updateC50ComparedTo(e) {
       let comparedToCoin = (e && e.target.value) || 'bitcoin';
@@ -229,7 +209,6 @@
     window.onload = () => {
       updateC50ComparedTo();
       updateC20ComparedTo();
-      updateTechnicalIndicatorsChart();
     }
 
   </script>
