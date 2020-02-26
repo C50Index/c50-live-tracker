@@ -31,7 +31,7 @@ export const IndexData = {
     divisorType: 'market_weighted', // market_weighted | price_weighted
     summaryKey: 'c50CoinSummaries',
     numeratorKey: 'marketcap',
-    divisor: 214570583.32,
+    divisor: 217699185.83,
     chartDataKey: 'c50ChartData',
     name: 'C50Index', // The csv header name from the rails server
     displayName: 'C50 Index'
@@ -40,7 +40,7 @@ export const IndexData = {
     divisorType: 'market_weighted', // market_weighted | price_weighted
     summaryKey: 'c20CoinSummaries',
     numeratorKey: 'marketcap',
-    divisor: 24359904.42,
+    divisor: 25374076.22,
     chartDataKey: 'c20ChartData',
     name: 'C20Index', // The csv header name from the rails server for the chart data
     displayName: 'C20 Index'
@@ -58,31 +58,31 @@ export const IndexData = {
     divisorType: 'price_weighted', // market_weighted | price_weighted
     summaryKey: 'c20RPSummaries',
     numeratorKey: 'marketcap',
-    divisor: 14064715.568343,
+    divisor: 11672777.14,
     chartDataKey: 'c20RpChartData',
     name: 'C20RiskParity', // The csv header name from the rails server for the chart data
     displayName: 'C20 Risk Parity',
     slugToPercent: {
-      cardano: 4.48,
-      'bitcoin-cash': 3.79,
-      'binance-coin': 6.07,
-      'bitcoin-sv': 4.15,
-      bitcoin: 6.42,
-      dash: 5.07,
-      eos: 4.35,
-      'ethereum-classic': 5.16,
-      ethereum: 4.74,
-      chainlink: 5.05,
-      litecoin: 4.65,
-      iota: 4.94,
-      maker: 5.58,
-      neo: 4.34,
-      tron: 4.87,
-      nem: 5.19,
-      stellar: 5.14,
-      monero: 4.97,
-      ripple: 5.78,
-      tezos: 5.2
+      cardano: 4.37,
+      'bitcoin-cash': 3.61,
+      'binance-coin': 5.28,
+      'bitcoin-sv': 2.52,
+      bitcoin: 5.46,
+      dash: 4.2,
+      eos: 3.82,
+      'ethereum-classic': 4.3,
+      ethereum: 4.53,
+      leocoin: 14.05,
+      chainlink: 4.73,
+      litecoin: 4.21,
+      iota: 5.24,
+      maker: 5.03,
+      neo: 3.86,
+      tron: 3.88,
+      stellar: 5.07,
+      monero: 4.88,
+      ripple: 5.45,
+      tezos: 5.5,
     }
   }
 }
